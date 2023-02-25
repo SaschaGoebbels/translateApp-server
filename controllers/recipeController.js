@@ -2,7 +2,10 @@ const Recipes = require('../models/recipeModel');
 
 exports.getAllRecipes = async (req, res) => {
   try {
-    const recipes = await Recipes.find();
+    const query = { ...req.query };
+    const recipes = await Recipes.find(query);
+    console.log(query);
+    console.log(req.query);
     res.status(200).json({
       status: 'success',
       requestedAt: req.requestTime,
