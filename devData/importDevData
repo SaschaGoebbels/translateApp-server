@@ -13,29 +13,42 @@ mongoose
   .connect(DB, {
     useNewUrlParser: true,
     useCreateIndex: true,
+    useUnifiedTopology: true,
     useFindAndModify: false
   })
   .then(() => console.log('success'));
 
 //read json file
-const recipeList = JSON.parse(fs.readFileSync('./recipeList.json', 'utf-8'));
+const recipeList = JSON.parse(
+  fs.readFileSync(`${__dirname}/recipeList.json`, 'utf-8')
+);
 
 // import to db
+// node .\devData\importDevData --import
 const importData = async () => {
   try {
     await Recipe.create(recipeList);
+    console.log('import recipeList.json successfully ✅');
   } catch (err) {
     console.log(err);
   }
+  process.exit();
 };
 
 // clear db
+// node .\devData\importDevData --delete
 const deleteData = async () => {
   try {
     await Recipe.deleteMany();
+    console.log('delete all recipes ❌');
   } catch (err) {
     console.log(err);
   }
+  process.exit();
 };
 
-console.log(process.argv);
+if (process.argv[2] === '--import') {
+  importData();
+} else if (process.argv[2] === '--delete') {
+  deleteData();
+}
