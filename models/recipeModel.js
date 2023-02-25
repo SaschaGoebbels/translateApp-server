@@ -10,18 +10,7 @@ const recipeSchema = new mongoose.Schema({
   ingredients: Array,
   preparation: String
 });
+console.log('👍');
+const Recipes = mongoose.model('Recipe', recipeSchema);
 
-const Recipe = mongoose.model('Recipe', recipeSchema);
-
-// const testRecipe = new Recipe({
-//   name: 'Aus nix irgend was',
-//   ingredients: [{ name: 'Zwiebel', quantity: 100, unit: 'g' }],
-//   preparation: 'Hier steht die \nZubereitung!'
-// });
-
-// testRecipe
-//   .save()
-//   .then(doc => console.log(doc))
-//   .catch(err => console.log(err));
-
-module.exports = Recipe;
+module.exports = Recipes;
