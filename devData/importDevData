@@ -2,7 +2,6 @@ const fs = require('fs');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const Recipes = require('./../models/recipeModel');
-const Recipe = require('./../models/recipeModel');
 
 dotenv.config({ path: './config.env' });
 const DB = process.env.DATABASE.replace(
@@ -27,7 +26,7 @@ const recipeList = JSON.parse(
 // node .\devData\importDevData --import
 const importData = async () => {
   try {
-    await Recipe.create(recipeList);
+    await Recipes.create(recipeList);
     console.log('import recipeList.json successfully ✅');
   } catch (err) {
     console.log(err);
@@ -39,7 +38,7 @@ const importData = async () => {
 // node .\devData\importDevData --delete
 const deleteData = async () => {
   try {
-    await Recipe.deleteMany();
+    await Recipes.deleteMany();
     console.log('delete all recipes ❌');
   } catch (err) {
     console.log(err);
