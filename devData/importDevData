@@ -1,0 +1,41 @@
+const fs = require('fs');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+const Recipes = require('./../models/recipeModel');
+const Recipe = require('./../models/recipeModel');
+
+dotenv.config({ path: './config.env' });
+const DB = process.env.DATABASE.replace(
+  '<PASSWORD>',
+  process.env.DATABASE_PASSWORD
+);
+mongoose
+  .connect(DB, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false
+  })
+  .then(() => console.log('success'));
+
+//read json file
+const recipeList = JSON.parse(fs.readFileSync('./recipeList.json', 'utf-8'));
+
+// import to db
+const importData = async () => {
+  try {
+    await Recipe.create(recipeList);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+// clear db
+const deleteData = async () => {
+  try {
+    await Recipe.deleteMany();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+console.log(process.argv);
