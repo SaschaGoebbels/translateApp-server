@@ -1,7 +1,8 @@
 const Recipes = require('../models/recipeModel');
 const catchAsync = require('../utils/catchAsync');
+const AppError = require('../utils/appError');
 
-exports.getAllRecipes = catchAsync(async (req, res) => {
+exports.getAllRecipes = catchAsync(async (req, res, next) => {
   const query = { ...req.query };
   const recipes = await Recipes.find(query);
   console.log(query);
@@ -16,63 +17,50 @@ exports.getAllRecipes = catchAsync(async (req, res) => {
   });
 });
 
-exports.getRecipe = async (req, res) => {
+exports.getRecipe = catchAsync(async (req, res, next) => {
   console.log(req.params);
-  try {
-    // const recipe = await Recipes.find(el => el.id === id);
-    const recipe = await Recipes.findById(req.params.id);
-
-    res.status(200).json({
-      status: 'success',
-      data: {
-        recipe
-      }
-    });
-  } catch (err) {
-    res.status(404).json({ status: 'not found', message: err });
+  const recipe = await Recipes.findById(req.params.id);
+  if (!recipe) {
+    console.log('💥💥💥');
+    return next(new AppError('Recipe not found', 404));
   }
-};
+  res.status(200).json({
+    status: 'success',
+    data: {
+      recipe
+    }
+  });
+});
 // eslint-disable-next-line node/no-unsupported-features/es-syntax
-exports.createRecipe = async (req, res) => {
-  try {
-    const newRecipe = await Recipes.create(req.body);
-    res.status(201).json({
-      status: 'success',
-      data: {
-        recipe: newRecipe
-      }
-    });
-  } catch (err) {
-    res.status(400).json({ status: 'fail', message: err.message });
-  }
-};
+exports.createRecipe = catchAsync(async (req, res, next) => {
+  const newRecipe = await Recipes.create(req.body);
 
-exports.updateRecipe = async (req, res) => {
-  try {
-    const recipe = await Recipes.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true
-    });
-    res.status(200).json({
-      status: 'success',
-      data: {
-        recipe
-      }
-    });
-  } catch (err) {
-    res.status(404).json({ status: 'not found', message: err });
-  }
-};
+  res.status(201).json({
+    status: 'success',
+    data: {
+      recipe: newRecipe
+    }
+  });
+});
 
-exports.deleteRecipe = async (req, res) => {
-  try {
-    // await Recipes.deleteOne({ _id: req.params.id });
-    await Recipes.findByIdAndDelete(req.params.id);
-    res.status(204).json({
-      status: 'success',
-      data: null
-    });
-  } catch (err) {
-    res.status(404).json({ status: 'not found', message: err });
-  }
-};
+exports.updateRecipe = catchAsync(async (req, res, next) => {
+  const recipe = await Recipes.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true
+  });
+  res.status(200).json({
+    status: 'success',
+    data: {
+      recipe
+    }
+  });
+});
+
+exports.deleteRecipe = catchAsync(async (req, res, next) => {
+  // await Recipes.deleteOne({ _id: req.params.id });
+  await Recipes.findByIdAndDelete(req.params.id);
+  res.status(204).json({
+    status: 'success',
+    data: null
+  });
+});

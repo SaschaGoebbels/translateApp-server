@@ -10,7 +10,7 @@ const recipeSchema = new mongoose.Schema({
   ingredients: Array,
   preparation: String
 });
-console.log('👍');
+
 const Recipes = mongoose.model('Recipe', recipeSchema);
 
 module.exports = Recipes;
