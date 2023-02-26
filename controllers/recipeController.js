@@ -1,23 +1,20 @@
 const Recipes = require('../models/recipeModel');
+const catchAsync = require('../utils/catchAsync');
 
-exports.getAllRecipes = async (req, res) => {
-  try {
-    const query = { ...req.query };
-    const recipes = await Recipes.find(query);
-    console.log(query);
-    console.log(req.query);
-    res.status(200).json({
-      status: 'success',
-      requestedAt: req.requestTime,
-      results: recipes.length,
-      data: {
-        recipes
-      }
-    });
-  } catch (err) {
-    res.status(404).json({ status: 'not found', message: err });
-  }
-};
+exports.getAllRecipes = catchAsync(async (req, res) => {
+  const query = { ...req.query };
+  const recipes = await Recipes.find(query);
+  console.log(query);
+  console.log(req.query);
+  res.status(200).json({
+    status: 'success',
+    requestedAt: req.requestTime,
+    results: recipes.length,
+    data: {
+      recipes
+    }
+  });
+});
 
 exports.getRecipe = async (req, res) => {
   console.log(req.params);
