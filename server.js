@@ -3,7 +3,7 @@ const dotenv = require('dotenv');
 const app = require('./app');
 
 //temporary solution to test production
-// process.env.NODE_ENV = 'production';
+process.env.NODE_ENV = 'production';
 
 dotenv.config({ path: './config.env' });
 const DB = process.env.DATABASE.replace(

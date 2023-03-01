@@ -1,10 +1,14 @@
 {
   "version": "0.2",
-  "ignorePaths": ["./devData/recipeList.json"],
+  "ignorePaths": [
+    "./devData/recipeList.json"
+  ],
   "dictionaryDefinitions": [],
   "dictionaries": [],
   "language": "en,de",
-  "words": [],
+  "words": [
+    "errmsg"
+  ],
   "ignoreWords": [],
   "import": []
 }
