@@ -1,4 +1,4 @@
-const Users = require('../models/userModel');
+const User = require('../models/userModel');
 
 exports.getAllUsers = (req, res) => {
   res.status(500).json({
@@ -16,7 +16,7 @@ exports.getUser = (req, res) => {
 exports.createUser = async (req, res) => {
   try {
     console.log('✅', req.body);
-    const newUser = await Users.create(req.body);
+    const newUser = await User.create(req.body);
     console.log(newUser);
     res.status(201).json({ status: 'success', data: { user: newUser } });
   } catch (error) {

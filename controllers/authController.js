@@ -1,11 +1,20 @@
+// const mongoose = require('mongoose');
+const User = require('./../models/userModel');
 // const User = require('../models/userModel');
+const catchAsync = require('../utils/catchAsync');
 
-// export.signup = async (req, res, next) => {
-//     try {
-//         const newUser = await User.create(req.body);
-//         res.status(201).json({status: success, user: newUser});
+exports.signup = catchAsync(async (req, res, next) => {
+  // console.log(req.body);
+  console.log('✅');
+  const newUser = await User.create(req.body);
+  console.log('✅', newUser);
+  try {
+    const newUser = await User.create(req.body);
+    console.log('✅', newUser);
 
-//     } catch (error) {
-//     res.status(500).json({err: error,message:error.message});
-//     }
-// }
+    res.status(201).json({ status: 'success', user: newUser });
+  } catch (error) {
+    // console.log('❌CATCH');
+    res.status(500).json({ err: error, message: error.message });
+  }
+});

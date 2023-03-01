@@ -11,13 +11,10 @@ const sendErrorDev = (err, res) => {
 
 const sendErrorProd = (err, res) => {
   if (err.isOperational) {
-    console.log('operational✅');
     res
       .status(err.statusCode)
       .json({ status: err.status, message: err.message });
   } else {
-    console.error('💥💥💥 Error:', err);
-    // res.status(err.statusCode).json({ status: err.status, message: err });
     res
       .status(500)
       .json({ status: 'error', message: 'Es ist etwas schiefgelaufen!' });
@@ -56,7 +53,6 @@ module.exports = (err, req, res, next) => {
     if (error.code === 11000) error = handleDuplicateFieldDB(error);
     // if recipeName is empty or other validation
     if (err.name === 'ValidationError') {
-      console.log('⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡⚡');
       error = handleValidationErrorDB(err);
     }
     sendErrorProd(error, res);

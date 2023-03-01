@@ -20,8 +20,14 @@ const userSchema = new mongoose.Schema({
     minlength: [4, 'Passwort muss mindestens 4 Zeichen lang sein!']
   },
   passwordConfirm: {
+    type: String,
     required: [true, 'Bitte Passwort bestätigen!'],
-    type: String
+    validation: {
+      validator: function(el) {
+        return el === this.password;
+      },
+      message: 'Passwort stimmt nicht überein'
+    }
   },
   settings: { type: String, ref: 'Settings' },
   recipeList: [{ type: Array, ref: 'Recipe' }],
@@ -30,4 +36,10 @@ const userSchema = new mongoose.Schema({
   superUser: { type: Boolean, default: false }
 });
 
-exports.User = mongoose.model('User', userSchema);
+userSchema.pre('save', function(next) {
+  if (!this.isModified('password')) return next();
+  //TODO
+});
+const Users = mongoose.model('User', userSchema);
+
+module.exports = Users;
