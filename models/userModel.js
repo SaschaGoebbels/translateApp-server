@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 // eslint-disable-next-line import/no-extraneous-dependencies
 const validator = require('validator');
+// eslint-disable-next-line import/no-extraneous-dependencies
 const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
@@ -31,6 +32,7 @@ const userSchema = new mongoose.Schema({
       message: 'Passwort stimmt nicht überein'
     }
   },
+  passwordChangedAt: Date,
   settings: { type: String, ref: 'Settings' },
   recipeList: [{ type: Array, ref: 'Recipe' }],
   shoppingList: [{ type: Array, ref: 'ShoppingList' }],
@@ -48,6 +50,7 @@ userSchema.pre('save', async function(next) {
   next();
 });
 
+// instant method
 userSchema.methods.correctPassword = async function(
   candidatePassword,
   userPassword
@@ -55,6 +58,15 @@ userSchema.methods.correctPassword = async function(
   return await bcrypt.compare(candidatePassword, userPassword);
 };
 
+userSchema.methods.changePasswordAfter = async function(JWTTimestamp) {
+  if (this.passwordChangedAt) {
+    const changedTimestamp = parseInt(
+      this.passwordChangedAt.getTime() / 1000,
+      10
+    );
+    return JWTTimestamp < changedTimestamp;
+  }
+};
 const Users = mongoose.model('User', userSchema);
 
 module.exports = Users;

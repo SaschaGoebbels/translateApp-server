@@ -37,6 +37,8 @@ const handleValidationErrorDB = err => {
   return new AppError(message, 400);
 };
 
+const handleJsonWebToken = () => new AppError('Invalid token', 401);
+
 // error controller
 module.exports = (err, req, res, next) => {
   // default error
@@ -54,6 +56,9 @@ module.exports = (err, req, res, next) => {
     // if recipeName is empty or other validation
     if (err.name === 'ValidationError') {
       error = handleValidationErrorDB(err);
+    }
+    if (error.name === 'JsonWebTokenError') {
+      error = handleJsonWebToken();
     }
     sendErrorProd(error, res);
   }
