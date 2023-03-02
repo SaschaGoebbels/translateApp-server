@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 // eslint-disable-next-line import/no-extraneous-dependencies
 const validator = require('validator');
+const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
   name: { required: [true, 'Bitte Name eingeben !'], type: String, trim: true },
@@ -16,6 +17,7 @@ const userSchema = new mongoose.Schema({
   password: {
     required: [true, 'Bitte Passwort eingeben!'],
     type: String,
+    select: false,
     trim: true,
     minlength: [4, 'Passwort muss mindestens 4 Zeichen lang sein!']
   },
@@ -36,10 +38,23 @@ const userSchema = new mongoose.Schema({
   superUser: { type: Boolean, default: false }
 });
 
-userSchema.pre('save', function(next) {
+userSchema.pre('save', async function(next) {
+  // only run if password changed
   if (!this.isModified('password')) return next();
-  //TODO
+  // hash the password with cost of 12
+  this.password = await bcrypt.hash(this.password, 12);
+  // delete passwordConfirm, just needed for password comparison
+  this.passwordConfirm = undefined;
+  next();
 });
+
+userSchema.methods.correctPassword = async function(
+  candidatePassword,
+  userPassword
+) {
+  return await bcrypt.compare(candidatePassword, userPassword);
+};
+
 const Users = mongoose.model('User', userSchema);
 
 module.exports = Users;
