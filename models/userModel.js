@@ -35,6 +35,8 @@ const userSchema = new mongoose.Schema({
     }
   },
   passwordChangedAt: Date,
+  passwordResetToken: String,
+  passwordResetExpires: Date,
   settings: { type: String, ref: 'Settings' },
   recipeList: [{ type: Array, ref: 'Recipe' }],
   shoppingList: [{ type: Array, ref: 'ShoppingList' }],
@@ -71,7 +73,16 @@ userSchema.methods.changePasswordAfter = async function(JWTTimestamp) {
   return false;
 };
 
-userSchema.methods.createPasswordResetToken = function() {};
+userSchema.methods.createPasswordResetToken = function() {
+  const resetToken = crypto.randomBytes(32).toString('hex');
+  this.passwordResetToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex');
+  // console.log({ resetToken }, this.passwordResetToken);
+  this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+  return resetToken;
+};
 
 const Users = mongoose.model('User', userSchema);
 
