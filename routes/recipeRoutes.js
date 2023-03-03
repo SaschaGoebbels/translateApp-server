@@ -6,8 +6,16 @@ const router = express.Router();
 
 router
   .route('/')
-  .get(authController.protect, recipeController.getAllRecipes)
-  .post(authController.protect, recipeController.createRecipe);
+  .get(
+    authController.protect,
+    authController.restrictTo('admin', 'user'),
+    recipeController.getAllRecipes
+  )
+  .post(
+    authController.protect,
+    authController.restrictTo('admin', 'user'),
+    recipeController.createRecipe
+  );
 router
   .route('/:id')
   .get(recipeController.getRecipe)

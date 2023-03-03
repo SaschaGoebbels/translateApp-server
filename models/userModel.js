@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 // eslint-disable-next-line import/no-extraneous-dependencies
 const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 
 const userSchema = new mongoose.Schema({
   name: { required: [true, 'Bitte Name eingeben !'], type: String, trim: true },
@@ -22,6 +23,7 @@ const userSchema = new mongoose.Schema({
     trim: true,
     minlength: [4, 'Passwort muss mindestens 4 Zeichen lang sein!']
   },
+  role: { type: String, enum: ['user', 'admin'], default: 'user' },
   passwordConfirm: {
     type: String,
     required: [true, 'Bitte Passwort bestätigen!'],
@@ -66,7 +68,11 @@ userSchema.methods.changePasswordAfter = async function(JWTTimestamp) {
     );
     return JWTTimestamp < changedTimestamp;
   }
+  return false;
 };
+
+userSchema.methods.createPasswordResetToken = function() {};
+
 const Users = mongoose.model('User', userSchema);
 
 module.exports = Users;

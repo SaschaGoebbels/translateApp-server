@@ -62,10 +62,40 @@ exports.protect = catchAsync(async (req, res, next) => {
     return next(new AppError('User not found', 401));
   }
   // check if password is changed after the token
-  if (currentUser.passwordChangedAfter(decoded.iat)) {
+  if (await currentUser.changePasswordAfter(decoded.iat)) {
     return next(new AppError('User recently changed password', 401));
   }
   // access to protected route
   req.user = currentUser;
   next();
 });
+
+exports.restrictTo = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return next(
+        new AppError('You do not have permission to perform this action', 403)
+      );
+    }
+    next();
+  };
+};
+
+exports.forgotPassword = catchAsync(async (req, res, next) => {
+  // get user by provided email
+  const user = await User.findOne({ email: req.body.email });
+  if (!user) {
+    return next(new AppError('There is no user with that email', 404));
+  }
+  // generate reset token
+  const resetToken = user.getResetPasswordToken();
+  await user.save({ validateBeforeSave: false });
+  // create reset url
+  const resetUrl = `${req.protocol}://${req.get(
+    'host'
+  )}/api/v1/users/resetPassword/${resetToken}`;
+  const message = `You are receiving this email because you (or someone else) have requested the reset of a password. Please make a PUT request to: \n\n ${resetUrl}`;
+  // generate token
+  // send token via mail
+});
+exports.resetPassword = catchAsync(async (req, res, next) => {});
