@@ -21,13 +21,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     select: false,
     trim: true,
-    minlength: [4, 'Passwort muss mindestens 4 Zeichen lang sein!']
+    minlength: [4, 'Das Passwort muss mindestens 4 Zeichen lang sein!']
   },
   role: { type: String, enum: ['user', 'admin'], default: 'user' },
   passwordConfirm: {
     type: String,
     required: [true, 'Bitte Passwort bestätigen!'],
-    validation: {
+    validate: {
+      // This only works on CREATE and SAVE!!!
       validator: function(el) {
         return el === this.password;
       },
@@ -61,6 +62,15 @@ userSchema.methods.correctPassword = async function(
 ) {
   return await bcrypt.compare(candidatePassword, userPassword);
 };
+
+// if password not changed or its new created dokument = return next()
+userSchema.pre('save', async function(next) {
+  // isNew = method of mongoose
+  if (!this.isModified('password') || this.isNew) return next();
+  // the database is a little slower than create token, for that issue subtract 1s
+  this.passwordChangedAt = Date.now() - 1000;
+  next();
+});
 
 userSchema.methods.changePasswordAfter = async function(JWTTimestamp) {
   if (this.passwordChangedAt) {
