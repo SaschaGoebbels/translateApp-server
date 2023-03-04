@@ -38,6 +38,11 @@ const userSchema = new mongoose.Schema({
   passwordChangedAt: Date,
   passwordResetToken: String,
   passwordResetExpires: Date,
+
+  active: { type: Boolean, default: true, select: false },
+  createdAt: { type: Date, default: Date.now, select: false },
+  updatedAt: { type: Date, default: Date.now, select: false },
+
   settings: { type: String, ref: 'Settings' },
   recipeList: [{ type: Array, ref: 'Recipe' }],
   shoppingList: [{ type: Array, ref: 'ShoppingList' }],
@@ -53,6 +58,11 @@ userSchema.pre('save', async function(next) {
   // delete passwordConfirm, just needed for password comparison
   this.passwordConfirm = undefined;
   next();
+});
+
+userSchema.pre(/^find/, async function(next) {
+  // this points to the current query
+  this.find({ active: { $ne: false } });
 });
 
 // instant method
