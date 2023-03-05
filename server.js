@@ -17,28 +17,39 @@ const DB = process.env.DATABASE.replace(
   '<PASSWORD>',
   process.env.DATABASE_PASSWORD
 );
-mongoose
-  .connect(DB, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: false
-  })
-  .then(() =>
-    console.log(
-      `✅ server starting successfully 💥 Mode: ${process.env.NODE_ENV}`
-    )
-  );
+const connectDB = async () => {
+  try {
+    const conn = await mongoose
+      .connect(DB, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useCreateIndex: true,
+        useFindAndModify: false
+      })
+      .then(() =>
+        console.log(
+          `✅ server starting successfully 💥 Mode: ${process.env.NODE_ENV}`
+        )
+      );
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
+  } catch (err) {
+    console.log(err);
+    process.exit(1);
+  }
+};
 
 const port = process.env.PORT || 3000;
-const server = app.listen(port, () => {
-  console.log(`App running on port ${port}...`);
-});
 
-// catch unhandled promise rejections
-process.on('unhandledRejection', err => {
-  console.log('💥💥 unhandled rejection - shutdown 💥💥');
-  console.log(err.name, '🚩', err.message);
-  //first shutdown the server then exit the process
-  server.close(() => process.exit(1));
+//Connect to the database before listening
+connectDB().then(() => {
+  const server = app.listen(port, () => {
+    console.log(`App running on port ${port}...`);
+  });
+  // catch unhandled promise rejections
+  process.on('unhandledRejection', err => {
+    console.log('💥💥 unhandled rejection - shutdown 💥💥');
+    console.log(err.name, '🚩', err.message);
+    //first shutdown the server then exit the process
+    server.close(() => process.exit(1));
+  });
 });
