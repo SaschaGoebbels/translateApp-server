@@ -24,6 +24,8 @@ const sendLoginToken = async (user, statusCode, res) => {
   };
   if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
   res.cookie('jwt', token, cookieOptions);
+  // remove password from output
+  user.password = undefined;
   res.status(statusCode).json({ status: 'success', token, data: { user } });
 };
 

@@ -46,8 +46,7 @@ const userSchema = new mongoose.Schema({
   settings: { type: String, ref: 'Settings' },
   recipeList: [{ type: Array, ref: 'Recipe' }],
   shoppingList: [{ type: Array, ref: 'ShoppingList' }],
-  weeklyPlan: [{ type: Array, ref: 'WeeklyPlan' }],
-  superUser: { type: Boolean, default: false }
+  weeklyPlan: [{ type: Array, ref: 'WeeklyPlan' }]
 });
 
 userSchema.pre('save', async function(next) {
