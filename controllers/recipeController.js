@@ -2,11 +2,12 @@ const Recipes = require('../models/recipeModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
-exports.getAllRecipes = catchAsync(async (req, res, next) => {
+//TODO changed name to getExampleRecipes = getAllRecipes
+exports.getExampleRecipes = catchAsync(async (req, res, next) => {
   const query = { ...req.query };
   const recipes = await Recipes.find(query);
-  console.log(query);
-  console.log(req.query);
+  // console.log(query);
+  // console.log(req.query);
   res.status(200).json({
     status: 'success',
     requestedAt: req.requestTime,
@@ -16,7 +17,29 @@ exports.getAllRecipes = catchAsync(async (req, res, next) => {
     }
   });
 });
-
+// TODO get recipe of user = old version
+// // // exports.getAllRecipes = catchAsync(async (req, res, next) => {
+// // //   const query = { ...req.query };
+// // //   const recipes = await Recipes.find(query);
+// // //   // console.log(query);
+// // //   // console.log(req.query);
+// // //   res.status(200).json({
+// // //     status: 'success',
+// // //     requestedAt: req.requestTime,
+// // //     results: recipes.length,
+// // //     data: {
+// // //       recipes
+// // //     }
+// // //   });
+// // // });
+//==================================================================
+////////////////// TODO ////////////////// copy from userController
+exports.getAllRecipes = catchAsync(async (req, res, next) => {
+  console.log(req.body);
+  const user = await User.findByIdAndUpdate(req.user.id);
+  res.status(200).json({ status: 'success', data: user.appData });
+});
+//==================================================================
 exports.getRecipe = catchAsync(async (req, res, next) => {
   console.log(req.params);
   const recipe = await Recipes.findById(req.params.id);

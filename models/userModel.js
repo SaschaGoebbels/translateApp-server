@@ -43,10 +43,15 @@ const userSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now, select: false },
   updatedAt: { type: Date, default: Date.now, select: false },
 
-  settings: { type: String, ref: 'Settings' },
-  recipeList: [{ type: Array, ref: 'Recipe' }],
-  shoppingList: [{ type: Array, ref: 'ShoppingList' }],
-  weeklyPlan: [{ type: Array, ref: 'WeeklyPlan' }]
+  appData: {
+    type: Object,
+    default: {
+      settings: { type: String, ref: 'settings' },
+      recipeList: { type: Array, ref: 'recipeList' },
+      shoppingList: { type: Array, ref: 'shoppingList' },
+      weeklyPlan: { type: Array, ref: 'weeklyPlan' }
+    }
+  }
 });
 
 userSchema.pre('save', async function(next) {

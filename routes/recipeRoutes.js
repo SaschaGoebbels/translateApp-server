@@ -18,8 +18,8 @@ router
   );
 router
   .route('/:id')
-  .get(recipeController.getRecipe)
-  .patch(recipeController.updateRecipe)
-  .delete(recipeController.deleteRecipe);
+  .get(authController.protect, recipeController.getRecipe)
+  .patch(authController.protect, recipeController.updateRecipe)
+  .delete(authController.protect, recipeController.deleteRecipe);
 
 module.exports = router;

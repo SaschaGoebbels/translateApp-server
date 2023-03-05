@@ -10,6 +10,7 @@ const filteredObj = (body, ...allowedFields) => {
   return newObj;
 };
 
+// related to administration
 exports.getAllUsers = catchAsync(async (req, res) => {
   const users = await User.find();
   res.status(200).json({
@@ -53,6 +54,7 @@ exports.getUser = (req, res) => {
 };
 //BUG
 exports.createUser = async (req, res) => {
+  console.log('❌');
   try {
     console.log('✅', req.body);
     const newUser = await User.create(req.body);
