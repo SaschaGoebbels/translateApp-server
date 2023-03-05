@@ -10,7 +10,7 @@ process.on('uncaughtException', err => {
 });
 
 // // // temporary solution to test production
-// process.env.NODE_ENV = 'production';
+process.env.NODE_ENV = 'production';
 
 dotenv.config({ path: './config.env' });
 const DB = process.env.DATABASE;
@@ -23,11 +23,12 @@ const connectDB = async () => {
         useCreateIndex: true,
         useFindAndModify: false
       })
-      .then(() =>
+      .then(() => {
         console.log(
           `✅ server starting successfully 💥 Mode: ${process.env.NODE_ENV}`
-        )
-      );
+        );
+      });
+
     // console.log(`MongoDB Connected: ${conn.connection.host}`);
   } catch (err) {
     console.log(err);
