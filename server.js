@@ -26,7 +26,7 @@ const connectDB = async () => {
       })
       .then(() => {
         console.log(
-          `✅ server starting successfully 💥 Mode: ${process.env.NODE_ENV}`
+          `😁 server starting successfully 😁 Mode: ${process.env.NODE_ENV}`
         );
       });
   } catch (err) {

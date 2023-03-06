@@ -1,13 +1,13 @@
 const Recipes = require('../models/recipeModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
+const User = require('../models/userModel');
+const { Mongoose } = require('mongoose');
 
-//TODO changed name to getExampleRecipes = getAllRecipes
+// example list
 exports.getExampleRecipes = catchAsync(async (req, res, next) => {
   const query = { ...req.query };
   const recipes = await Recipes.find(query);
-  // console.log(query);
-  // console.log(req.query);
   res.status(200).json({
     status: 'success',
     requestedAt: req.requestTime,
@@ -17,51 +17,41 @@ exports.getExampleRecipes = catchAsync(async (req, res, next) => {
     }
   });
 });
-// TODO get recipe of user = old version
-// // // exports.getAllRecipes = catchAsync(async (req, res, next) => {
-// // //   const query = { ...req.query };
-// // //   const recipes = await Recipes.find(query);
-// // //   // console.log(query);
-// // //   // console.log(req.query);
-// // //   res.status(200).json({
-// // //     status: 'success',
-// // //     requestedAt: req.requestTime,
-// // //     results: recipes.length,
-// // //     data: {
-// // //       recipes
-// // //     }
-// // //   });
-// // // });
-//==================================================================
-////////////////// TODO ////////////////// copy from userController
-exports.getAllRecipes = catchAsync(async (req, res, next) => {
-  console.log(req.body);
-  const user = await User.findByIdAndUpdate(req.user.id);
-  res.status(200).json({ status: 'success', data: user.appData });
-});
-//==================================================================
-exports.getRecipe = catchAsync(async (req, res, next) => {
-  console.log(req.params);
-  const recipe = await Recipes.findById(req.params.id);
-  if (!recipe) {
-    console.log('💥💥💥');
-    return next(new AppError('Recipe not found', 404));
-  }
-  res.status(200).json({
-    status: 'success',
-    data: {
-      recipe
-    }
-  });
-});
+
+// exports.getRecipe = catchAsync(async (req, res, next) => {
+//   console.log(req.params);
+//   const recipe = await Recipes.findById(req.params.id);
+//   if (!recipe) {
+//     console.log('💥💥💥');
+//     return next(new AppError('Recipe not found', 404));
+//   }
+//   res.status(200).json({
+//     status: 'success',
+//     data: {
+//       recipe
+//     }
+//   });
+// });
+////////////////// FIXME ////////////////// recipe issue
 // eslint-disable-next-line node/no-unsupported-features/es-syntax
 exports.createRecipe = catchAsync(async (req, res, next) => {
-  const newRecipe = await Recipes.create(req.body);
-
+  console.log('✅', req.body);
+  const newRecipe = await Mongoose.model('recipe', req.body);
+  console.log(newRecipe);
+  // const newRecipe = await Recipes.create({
+  // name: req.body.name
+  // ingredients: req.body.ingredients,
+  // preparation: req.body.preparation
+  // });
+  console.log('✅', newRecipe);
+  // const user = User.findByIdAndUpdate(req.user.id);
+  // console.log(newRecipe);
+  // user.appData.recipeList.push(newRecipe);
+  // user.save();
   res.status(201).json({
     status: 'success',
     data: {
-      recipe: newRecipe
+      recipe: 'newRecipe'
     }
   });
 });

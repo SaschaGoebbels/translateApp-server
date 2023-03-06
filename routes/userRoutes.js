@@ -18,14 +18,15 @@ router.delete('/deleteMe', authController.protect, userController.deleteMe);
 router.post('/forgotPassword', authController.forgotPassword);
 router.patch('/resetPassword/:token', authController.resetPassword);
 
-router
-  .route('/')
-  .get(
-    authController.protect,
-    authController.restrictTo('admin'),
-    userController.getAllUsers
-  )
-  .post(userController.createUser);
+// get users not needed, maybe later
+// // // router
+// // //   .route('/')
+// // //   .get(
+// // //     authController.protect,
+// // //     authController.restrictTo('admin'),
+// // //     userController.getAllUsers
+// // //   )
+// // //   .post(userController.createUser);
 
 router
   .route('/:id')

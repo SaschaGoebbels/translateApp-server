@@ -13,7 +13,7 @@ const sendEmail = require('../utils/email');
 const signToken = id => {
   return jwt.sign({ id }, process.env.JWT_SECRET);
 };
-//TODO
+//
 const sendLoginToken = async (user, statusCode, res) => {
   const token = signToken(user._id);
   const cookieOptions = {
@@ -37,6 +37,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     passwordConfirm: req.body.passwordConfirm
     // appData:{recipeList,}
   });
+  console.log('✅', newUser);
   sendLoginToken(newUser, 201, res);
 });
 
@@ -81,14 +82,14 @@ exports.protect = catchAsync(async (req, res, next) => {
   }
   // access to protected route
   req.user = currentUser;
+  console.log('🏆 protect: ', req.user.name);
   next();
 });
 
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
-    console.log(req.user.role, roles);
     if (!roles.includes(req.user.role)) {
-      console.log(!roles.includes(req.user.role));
+      console.log('restricted', !roles.includes(req.user.role));
       // error doubled because otherwise no output
       next(
         new AppError('You do not have permission to perform this action', 403)

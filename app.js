@@ -16,6 +16,7 @@ const globalErrorHandler = require('./controllers/errorController');
 
 const recipeRouter = require('./routes/recipeRoutes');
 const userRouter = require('./routes/userRoutes');
+const appDataRouter = require('./routes/appDataRoutes');
 
 const app = express();
 
@@ -62,6 +63,7 @@ app.use((req, res, next) => {
 // routes
 app.use('/api/v1/recipe', recipeRouter);
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/appData', appDataRouter);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Url: ${req.originalUrl} nicht gefunden!`, 404));
