@@ -38,18 +38,20 @@ const userSchema = new mongoose.Schema({
   passwordChangedAt: Date,
   passwordResetToken: String,
   passwordResetExpires: Date,
-
+  testList: [],
   active: { type: Boolean, default: true, select: false },
   createdAt: { type: Date, default: Date.now, select: false },
   updatedAt: { type: Date, default: Date.now, select: false },
-
   appData: {
     type: Object,
     default: {
-      settings: { type: String, ref: 'settings' },
-      recipeList: { type: Array, ref: 'recipeList' },
-      shoppingList: { type: Array, ref: 'shoppingList' },
-      weeklyPlan: { type: Array, ref: 'weeklyPlan' }
+      settings: {},
+      recipeList: [],
+      shoppingList: [],
+      weeklyPlan: []
+      // recipeList: { default: [], type: Array, ref: 'recipeList' },
+      // shoppingList: { type: Array, ref: 'shoppingList' },
+      // weeklyPlan: { type: Array, ref: 'weeklyPlan' }
     }
   }
 });

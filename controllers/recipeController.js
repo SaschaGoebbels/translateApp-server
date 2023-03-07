@@ -1,8 +1,8 @@
+const { Mongoose } = require('mongoose');
 const Recipes = require('../models/recipeModel');
 const catchAsync = require('../utils/catchAsync');
-const AppError = require('../utils/appError');
+// const AppError = require('../utils/appError');
 const User = require('../models/userModel');
-const { Mongoose } = require('mongoose');
 
 // example list
 exports.getExampleRecipes = catchAsync(async (req, res, next) => {
@@ -32,42 +32,79 @@ exports.getExampleRecipes = catchAsync(async (req, res, next) => {
 //     }
 //   });
 // });
-////////////////// FIXME ////////////////// recipe issue
 // eslint-disable-next-line node/no-unsupported-features/es-syntax
 exports.createRecipe = catchAsync(async (req, res, next) => {
-  console.log('✅', req.body);
-  const newRecipe = await Mongoose.model('recipe', req.body);
-  console.log(newRecipe);
-  // const newRecipe = await Recipes.create({
-  // name: req.body.name
-  // ingredients: req.body.ingredients,
-  // preparation: req.body.preparation
-  // });
-  console.log('✅', newRecipe);
-  // const user = User.findByIdAndUpdate(req.user.id);
-  // console.log(newRecipe);
-  // user.appData.recipeList.push(newRecipe);
-  // user.save();
+  const newRecipe = req.body;
+  const user = await User.findById(req.user.id);
+  await User.findByIdAndUpdate(req.user.id, {
+    $push: { 'appData.recipeList': newRecipe }
+  });
+  console.log(user.testList.length);
+  // await user.save();
+  // await User.updateOne(
+  //   { _id: req.user.id },
+  //   {
+  //     $push: { testList: newRecipe }
+  //   }
+  // );
+  // // await User.updateOne(
+  // //   { _id: req.user.id },
+  // //   {
+  // //     $push: { 'appData.recipeList': newRecipe }
+  // //   }
+  // // );
   res.status(201).json({
     status: 'success',
     data: {
-      recipe: 'newRecipe'
+      recipe: newRecipe
     }
   });
 });
 
 exports.updateRecipe = catchAsync(async (req, res, next) => {
-  const recipe = await Recipes.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true
-  });
-  res.status(200).json({
+  const updateRecipe = req.body.updated;
+  console.log(updateRecipe);
+  await User.updateOne(
+    { _id: req.user.id },
+    {
+      $set: {
+        'recipeList.$[element]': updateRecipe
+      }
+    },
+    {
+      arrayFilters: [
+        {
+          'element.name': req.body.name
+        }
+      ]
+    }
+  );
+  // await User.updateOne(
+  //   { _id: req.user.id },
+  //   {
+  //     $push: { 'appData.recipeList': updateRecipe }
+  //   }
+  // );
+  res.status(201).json({
     status: 'success',
     data: {
-      recipe
+      recipe: updateRecipe
     }
   });
 });
+
+// exports.updateRecipe = catchAsync(async (req, res, next) => {
+//   const recipe = await Recipes.findByIdAndUpdate(req.params.id, req.body, {
+//     new: true,
+//     runValidators: true
+//   });
+//   res.status(200).json({
+//     status: 'success',
+//     data: {
+//       recipe
+//     }
+//   });
+// });
 
 exports.deleteRecipe = catchAsync(async (req, res, next) => {
   // await Recipes.deleteOne({ _id: req.params.id });
