@@ -32,27 +32,15 @@ exports.getExampleRecipes = catchAsync(async (req, res, next) => {
 //     }
 //   });
 // });
+//==================================================================
 // eslint-disable-next-line node/no-unsupported-features/es-syntax
 exports.createRecipe = catchAsync(async (req, res, next) => {
   const newRecipe = req.body;
-  const user = await User.findById(req.user.id);
   await User.findByIdAndUpdate(req.user.id, {
     $push: { 'appData.recipeList': newRecipe }
   });
-  console.log(user.testList.length);
-  // await user.save();
-  // await User.updateOne(
-  //   { _id: req.user.id },
-  //   {
-  //     $push: { testList: newRecipe }
-  //   }
-  // );
-  // // await User.updateOne(
-  // //   { _id: req.user.id },
-  // //   {
-  // //     $push: { 'appData.recipeList': newRecipe }
-  // //   }
-  // // );
+  // const user = await User.findById(req.user.id);
+  // console.log('✅', user);
   res.status(201).json({
     status: 'success',
     data: {
@@ -61,30 +49,25 @@ exports.createRecipe = catchAsync(async (req, res, next) => {
   });
 });
 
+//==================================================================
+//BUG
 exports.updateRecipe = catchAsync(async (req, res, next) => {
-  const updateRecipe = req.body.updated;
-  console.log(updateRecipe);
-  await User.updateOne(
-    { _id: req.user.id },
+  const searchId = req.params.id;
+  const updateRecipe = req.body;
+  const user = await User.findById(req.user.id);
+  await user.updateOne(
+    { 'appData.recipeList': { $elemMatch: { id: searchId } } },
     {
-      $set: {
-        'recipeList.$[element]': updateRecipe
-      }
-    },
-    {
-      arrayFilters: [
-        {
-          'element.name': req.body.name
-        }
-      ]
+      $set: { 'appData.recipeList.$.name': 'XXXX' }
     }
   );
-  // await User.updateOne(
-  //   { _id: req.user.id },
-  //   {
-  //     $push: { 'appData.recipeList': updateRecipe }
-  //   }
-  // );
+  // // // await user.updateOne(
+  // // //   { 'appData.recipeList': { $elemMatch: { id: searchId } } },
+  // // //   {
+  // // //     name: 'XXX'
+  // // //   }
+  // // // );
+  console.log(user.appData.recipeList);
   res.status(201).json({
     status: 'success',
     data: {
@@ -92,7 +75,6 @@ exports.updateRecipe = catchAsync(async (req, res, next) => {
     }
   });
 });
-
 // exports.updateRecipe = catchAsync(async (req, res, next) => {
 //   const recipe = await Recipes.findByIdAndUpdate(req.params.id, req.body, {
 //     new: true,
