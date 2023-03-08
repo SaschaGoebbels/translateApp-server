@@ -1,9 +1,10 @@
-const { Mongoose } = require('mongoose');
+// const { Mongoose } = require('mongoose');
 const Recipes = require('../models/recipeModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const User = require('../models/userModel');
 
+//==================================================================
 // example list
 exports.getExampleRecipes = catchAsync(async (req, res, next) => {
   const query = { ...req.query };
@@ -17,21 +18,8 @@ exports.getExampleRecipes = catchAsync(async (req, res, next) => {
     }
   });
 });
+//==================================================================
 
-// // // exports.getRecipe = catchAsync(async (req, res, next) => {
-// // //   console.log(req.params);
-// // //   const recipe = await Recipes.findById(req.params.id);
-// // //   if (!recipe) {
-// // //     console.log('💥💥💥');
-// // //     return next(new AppError('Recipe not found', 404));
-// // //   }
-// // //   res.status(200).json({
-// // //     status: 'success',
-// // //     data: {
-// // //       recipe
-// // //     }
-// // //   });
-// // // });
 //==================================================================
 // eslint-disable-next-line node/no-unsupported-features/es-syntax
 exports.createRecipe = catchAsync(async (req, res, next) => {
@@ -60,7 +48,6 @@ exports.updateRecipe = catchAsync(async (req, res, next) => {
     },
     { new: true }
   );
-  console.log('✅', data);
   if (data === undefined || data === null) {
     return next(new AppError('Document not found', 404));
   }
@@ -72,11 +59,15 @@ exports.updateRecipe = catchAsync(async (req, res, next) => {
   });
 });
 
+//==================================================================
 exports.deleteRecipe = catchAsync(async (req, res, next) => {
-  // await Recipes.deleteOne({ _id: req.params.id });
-  await Recipes.findByIdAndDelete(req.params.id);
+  await User.update(
+    { _id: req.user.id },
+    { $pull: { 'appData.recipeList': { id: req.params.id } } }
+  );
+
   res.status(204).json({
     status: 'success',
-    data: null
+    data: []
   });
 });
