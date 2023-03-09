@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.post('/signup', authController.signup);
 router.post('/login', authController.login);
+router.post('/logout', authController.logout);
 //  authController.protect just for logged in users
 router.patch(
   '/updateMyPassword',

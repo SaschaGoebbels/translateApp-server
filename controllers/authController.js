@@ -55,6 +55,11 @@ exports.login = catchAsync(async (req, res, next) => {
   sendLoginToken(user, 200, res);
 });
 
+exports.logout = catchAsync(async (req, res, next) => {
+  res.cookie('jwt', null);
+  res.status(200).json({ status: 'logout', token: null });
+});
+
 exports.protect = catchAsync(async (req, res, next) => {
   // get token
   let token;
