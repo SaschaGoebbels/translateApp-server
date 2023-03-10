@@ -28,12 +28,14 @@ const handleCastErrorDB = err => {
 };
 const handleDuplicateFieldDB = err => {
   // const value = err.err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
-  const message = `Duplicate field value >> ${err.keyValue.name} << Please change value`;
+  // const message = `Duplicate field value >> ${err.keyValue.name} << Please change value`;
+  const message = `Die Emailadresse ist schon vorhanden !`;
   return new AppError(message, 400);
 };
 const handleValidationErrorDB = err => {
   const errors = Object.values(err.errors).map(el => el.message);
-  const message = `Invalid input data: ${errors.join('. ')}`;
+  const message = `Fehler: ${errors.join('. ')}`;
+  // const message = `Invalid input data: ${errors.join('. ')}`;
   return new AppError(message, 400);
 };
 
