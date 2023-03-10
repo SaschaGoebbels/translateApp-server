@@ -44,7 +44,9 @@ const userSchema = new mongoose.Schema({
   appData: {
     type: Object,
     default: {
-      settings: {},
+      settings: {
+        shoppingListSettings: { avoidList: 'Salz ,Pfeffer ,Chili ' }
+      },
       recipeList: [],
       shoppingList: [],
       weeklyPlan: []

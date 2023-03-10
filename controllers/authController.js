@@ -88,6 +88,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   // access to protected route
   req.user = currentUser;
   console.log('🏆 protect: ', req.user.name);
+  if (req.user.role === 'demo') console.log('❌ DEMO');
   next();
 });
 
