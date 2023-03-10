@@ -19,6 +19,7 @@ router.delete('/deleteMe', authController.protect, userController.deleteMe);
 router.post('/forgotPassword', authController.forgotPassword);
 router.patch('/resetPassword/:token', authController.resetPassword);
 
+router.get('/appData', authController.protect, userController.getAppData);
 // get users not needed, maybe later
 // // // router
 // // //   .route('/')

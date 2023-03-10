@@ -20,6 +20,12 @@ exports.getAllUsers = catchAsync(async (req, res) => {
   });
 });
 
+exports.getAppData = catchAsync(async (req, res) => {
+  const user = await User.findById(req.user.id);
+  console.log(user.appData);
+  res.status(200).json({ appData: user.appData });
+});
+
 exports.updateMe = catchAsync(async (req, res, next) => {
   // error if post passwordData
   console.log(req.body);
