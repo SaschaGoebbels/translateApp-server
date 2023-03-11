@@ -14,6 +14,7 @@ const signToken = id => {
   return jwt.sign({ id }, process.env.JWT_SECRET);
 };
 //
+////////////////// FIXME //////////////////
 const sendLoginToken = async (user, statusCode, res) => {
   const token = signToken(user._id);
   const cookieOptions = {
@@ -23,7 +24,8 @@ const sendLoginToken = async (user, statusCode, res) => {
     httpOnly: true
   };
   if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
-  res.cookie('jwt', token, cookieOptions);
+  // res.cookie('jwt', token, cookieOptions);
+  res.cookie('jwt', token);
   // remove password from output
   user.password = undefined;
   res.status(statusCode).json({ status: 'success', token, data: { user } });
