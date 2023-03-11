@@ -13,6 +13,7 @@ exports.getExampleRecipes = catchAsync(async (req, res, next) => {
     status: 'success',
     requestedAt: req.requestTime,
     results: recipes.length,
+    req,
     data: {
       recipes
     }
