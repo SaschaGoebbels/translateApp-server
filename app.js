@@ -25,7 +25,10 @@ const app = express();
 app.use(
   cors({
     // origin: 'https://cyan-pleasant-chicken.cyclic.app',
-    origin: '*',
+    origin: [
+      'https://papaya-crumble-be16e3.netlify.app/',
+      'https://cyan-pleasant-chicken.cyclic.app'
+    ],
     credentials: true
   })
 );
