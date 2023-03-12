@@ -10,7 +10,7 @@ process.on('uncaughtException', err => {
 });
 
 // // // temporary solution to test development
-process.env.NODE_ENV = 'development';
+// process.env.NODE_ENV = 'development';
 
 dotenv.config({ path: './config.env' });
 const DB = process.env.DATABASE;
