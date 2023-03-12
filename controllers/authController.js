@@ -22,8 +22,8 @@ const sendLoginToken = async (user, statusCode, res) => {
       Date.now() + 24 * 60 * 60 * 1000 * process.env.JWT_COOKIE_EXPIRES_IN
     ),
     httpOnly: true,
-    // SameSite: 'invalid'
-    SameSite: 'none'
+    SameSite: 'none',
+    secure: true
   };
   if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
   res.cookie('jwt', token, cookieOptions);
