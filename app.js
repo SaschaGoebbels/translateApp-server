@@ -24,7 +24,8 @@ const app = express();
 
 app.use(
   cors({
-    origin: 'https://cyan-pleasant-chicken.cyclic.app',
+    // origin: 'https://cyan-pleasant-chicken.cyclic.app',
+    origin: '*',
     credentials: true
   })
 );
