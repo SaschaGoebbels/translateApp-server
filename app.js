@@ -13,6 +13,8 @@ const hpp = require('hpp');
 // eslint-disable-next-line import/no-extraneous-dependencies
 const cors = require('cors');
 
+const cookieParser = require('cookie-parser');
+
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 
@@ -32,6 +34,8 @@ app.use(
     credentials: true
   })
 );
+
+app.use(cookieParser());
 
 // global middleware
 // set security HTTP headers
