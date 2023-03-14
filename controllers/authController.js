@@ -35,7 +35,6 @@ const sendLoginToken = async (user, statusCode, res) => {
   );
   // remove password from output
   user.password = undefined;
-  res.send('Cookie is set');
   res.status(statusCode).json({ status: 'success', data: { user } });
 };
 

@@ -24,6 +24,8 @@ const appDataRouter = require('./routes/appDataRoutes');
 
 const app = express();
 
+app.use(cookieParser());
+
 app.use(
   cors({
     // origin: 'https://cyan-pleasant-chicken.cyclic.app',
@@ -34,8 +36,6 @@ app.use(
     credentials: true
   })
 );
-
-app.use(cookieParser());
 
 // global middleware
 // set security HTTP headers
