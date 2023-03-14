@@ -30,8 +30,6 @@ const sendLoginToken = async (user, statusCode, res) => {
   res.cookie('jwt', token, cookieOptions);
   res.cookie('tokenWithOut', token);
   res.setHeader('Set-Cookie', 'myCookie=myValue; Secure; SameSite=None');
-  // res.cookie('test1', 'lax', { secure: true, SameSite: 'Lax' });
-  // res.cookie('test2', 'none', { secure: true, SameSite: 'none' });
   // remove password from output
   user.password = undefined;
   res.status(statusCode).json({ status: 'success', data: { user } });
