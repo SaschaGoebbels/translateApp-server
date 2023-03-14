@@ -17,23 +17,20 @@ const signToken = id => {
 ////////////////// FIXME //////////////////
 const sendLoginToken = async (user, statusCode, res) => {
   const token = signToken(user._id);
-
-  const cookieOptions = {
-    expires: new Date(
-      Date.now() + 24 * 60 * 60 * 1000 * process.env.JWT_COOKIE_EXPIRES_IN
-    ),
-    httpOnly: true,
-    SameSite: 'none',
-    secure: true
-  };
-  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
-  res.cookie('jwt', token, cookieOptions);
-  res.cookie('tokenWithOut', token);
-  // res.setHeader(
-  //   'Set-Cookie',
-  //   `jwt=${token}; Secure; SameSite=None;httpOnly=true`
-  // );
-  // remove password from output
+  // const cookieOptions = {
+  //   expires: new Date(
+  //     Date.now() + 24 * 60 * 60 * 1000 * process.env.JWT_COOKIE_EXPIRES_IN
+  //   ),
+  //   httpOnly: true,
+  //   SameSite: 'None'
+  // };
+  // if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+  // res.cookie('jwt', token, cookieOptions); // cookieParser doesn't work
+  res.setHeader(
+    'Set-Cookie',
+    `jwt=${token}; Secure; SameSite=None;httpOnly=true`
+  );
+  // // // remove password from output
   user.password = undefined;
   res.status(statusCode).json({ status: 'success', data: { user } });
 };
@@ -51,7 +48,6 @@ exports.signup = catchAsync(async (req, res, next) => {
 });
 
 exports.login = catchAsync(async (req, res, next) => {
-  console.log('🚩', req.cookies);
   const { email, password } = req.body;
   // if no email or password is provided, return an error
   if (!email || !password) {

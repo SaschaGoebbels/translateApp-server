@@ -5,10 +5,12 @@ const AppError = require('../utils/appError');
 const User = require('../models/userModel');
 
 //==================================================================
+////////////////// TODO //////////////////
 // example list
 exports.getExampleRecipes = catchAsync(async (req, res, next) => {
   const query = { ...req.query };
   const recipes = await Recipes.find(query);
+  console.log(req);
   res.status(200).json({
     status: 'success',
     requestedAt: req.requestTime,
@@ -34,7 +36,6 @@ exports.createRecipe = catchAsync(async (req, res, next) => {
     }
   });
 });
-
 //==================================================================
 exports.updateRecipe = catchAsync(async (req, res, next) => {
   const data = await User.findOneAndUpdate(

@@ -24,14 +24,13 @@ const appDataRouter = require('./routes/appDataRoutes');
 
 const app = express();
 
-app.use(cookieParser());
-
 app.use(
   cors({
     // origin: 'https://cyan-pleasant-chicken.cyclic.app',
     origin: [
       'https://papaya-crumble-be16e3.netlify.app/',
-      'https://cyan-pleasant-chicken.cyclic.app'
+      'https://cyan-pleasant-chicken.cyclic.app',
+      'http://localhost:3001'
     ],
     credentials: true
   })
@@ -58,6 +57,7 @@ app.use('/api', limiter);
 // limit body size to 10kb to prevent abuse
 app.use(express.json({ limit: '10kb' }));
 
+app.use(cookieParser());
 // data sanitization against NoSQL query injection (filter ou all $ and dots)
 app.use(mongoSanitize());
 
