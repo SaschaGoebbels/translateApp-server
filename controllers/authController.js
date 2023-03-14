@@ -28,10 +28,9 @@ const sendLoginToken = async (user, statusCode, res) => {
   };
   if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
   res.cookie('jwt', token, cookieOptions);
-  res.cookie('jwt', token);
-  res.cookie('test', 'token', { secure: true, SameSite: 'Lax' });
-  res.cookie('test2', 'token2', { secure: true, SameSite: 'none' });
-  res.cookie('test4', 'token4');
+  res.cookie('tokenWithOut', token);
+  res.cookie('test1', 'lax', { secure: true, SameSite: 'Lax' });
+  res.cookie('test2', 'none', { secure: true, SameSite: 'none' });
   // remove password from output
   user.password = undefined;
   res.status(statusCode).json({ status: 'success', token, data: { user } });
