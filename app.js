@@ -35,7 +35,7 @@ app.use(
     credentials: true
   })
 );
-
+app.use(cookieParser());
 // global middleware
 // set security HTTP headers
 app.use(helmet());
@@ -57,7 +57,6 @@ app.use('/api', limiter);
 // limit body size to 10kb to prevent abuse
 app.use(express.json({ limit: '10kb' }));
 
-app.use(cookieParser());
 // data sanitization against NoSQL query injection (filter ou all $ and dots)
 app.use(mongoSanitize());
 

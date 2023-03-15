@@ -14,21 +14,18 @@ const signToken = id => {
   return jwt.sign({ id }, process.env.JWT_SECRET);
 };
 //
-////////////////// FIXME //////////////////
 const sendLoginToken = async (user, statusCode, res) => {
   const token = signToken(user._id);
-  // const cookieOptions = {
-  //   expires: new Date(
-  //     Date.now() + 24 * 60 * 60 * 1000 * process.env.JWT_COOKIE_EXPIRES_IN
-  //   ),
-  //   httpOnly: true,
-  //   SameSite: 'None'
-  // };
-  // if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+
+  let secureBoolean = false;
+  if (process.env.NODE_ENV === 'production') secureBoolean = true;
+  console.log('📌', secureBoolean, process.env.NODE_ENV);
   // res.cookie('jwt', token, cookieOptions); // cookieParser doesn't work
+
   res.setHeader(
     'Set-Cookie',
-    `jwt=${token}; Secure; SameSite=None;httpOnly=true`
+    `jwt=${token}; Secure=false; SameSite=None;httpOnly=false;Path=/`
+    // `jwt=${token}; Secure=${secureBoolean}; SameSite=None;httpOnly=true`
   );
   // // // remove password from output
   user.password = undefined;
@@ -66,8 +63,11 @@ exports.logout = catchAsync(async (req, res, next) => {
   res.status(200).json({ status: 'logout', token: null });
 });
 
+////////////////// CHECK //////////////////
 exports.protect = catchAsync(async (req, res, next) => {
   // get token
+  console.log('🏆💥❌', req.headers.authorization);
+  console.log('🏆💥❌', req.headers);
   let token;
   if (
     req.headers.authorization &&
