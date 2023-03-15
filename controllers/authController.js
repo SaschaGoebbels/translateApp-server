@@ -14,14 +14,16 @@ const signToken = id => {
   return jwt.sign({ id }, process.env.JWT_SECRET);
 };
 //
-const sendLoginToken = async (user, statusCode, res) => {
+////////////////// CHECK //////////////////
+const sendLoginToken = async (user, statusCode, res, req) => {
   const token = signToken(user._id);
 
   let secureBoolean = false;
   if (process.env.NODE_ENV === 'production') secureBoolean = true;
   console.log('📌', secureBoolean, process.env.NODE_ENV);
   // res.cookie('jwt', token, cookieOptions); // cookieParser doesn't work
-
+  // res.set('Access-Control-Allow-Origin', req.headers.origin);
+  // res.set('Access-Control-Allow-Credentials', 'true');
   res.setHeader(
     'Set-Cookie',
     `jwt=${token}; Secure=false; SameSite=None;httpOnly=false;Path=/`
@@ -41,7 +43,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     // appData:{recipeList,}
   });
   console.log('✅', newUser);
-  sendLoginToken(newUser, 201, res);
+  sendLoginToken(newUser, 201, res, req);
 });
 
 exports.login = catchAsync(async (req, res, next) => {
@@ -55,7 +57,7 @@ exports.login = catchAsync(async (req, res, next) => {
   if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError('Incorrect email or password', 401));
   }
-  sendLoginToken(user, 200, res);
+  sendLoginToken(user, 200, res, req);
 });
 
 exports.logout = catchAsync(async (req, res, next) => {
