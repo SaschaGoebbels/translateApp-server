@@ -17,21 +17,24 @@ const signToken = id => {
 ////////////////// CHECK //////////////////
 const sendLoginToken = async (user, statusCode, res, req) => {
   const token = signToken(user._id);
-
-  let secureBoolean = false;
-  if (process.env.NODE_ENV === 'production') secureBoolean = true;
-  console.log('📌', secureBoolean, process.env.NODE_ENV);
-  // res.cookie('jwt', token, cookieOptions); // cookieParser doesn't work
-  // res.set('Access-Control-Allow-Origin', req.headers.origin);
-  // res.set('Access-Control-Allow-Credentials', 'true');
   res.setHeader(
     'Set-Cookie',
-    `jwt=${token}; Secure=false; SameSite=None;httpOnly=false;Path=/`
-    // `jwt=${token}; Secure=${secureBoolean}; SameSite=None;httpOnly=true`
+    `ksJwt=${token}; Secure; SameSite=None;Path=/;Max-Age=${60 * 60 * 24 * 90}`
+  );
+  res.set('Access-Control-Allow-Origin', req.headers.origin);
+  res.set('Access-Control-Allow-Credentials', 'true');
+  res.set(
+    'Access-Control-Expose-Headers',
+    'date, etag, access-control-allow-origin, access-control-allow-credentials'
   );
   // // // remove password from output
   user.password = undefined;
-  res.status(statusCode).json({ status: 'success', data: { user } });
+  res.status(statusCode).json({
+    status: 'success',
+    data: {
+      user
+    }
+  });
 };
 
 exports.signup = catchAsync(async (req, res, next) => {
@@ -61,21 +64,22 @@ exports.login = catchAsync(async (req, res, next) => {
 });
 
 exports.logout = catchAsync(async (req, res, next) => {
-  res.cookie('jwt', null);
+  res.cookie('ksJwt', null);
   res.status(200).json({ status: 'logout', token: null });
 });
 
 ////////////////// CHECK //////////////////
 exports.protect = catchAsync(async (req, res, next) => {
   // get token
-  console.log('🏆💥❌', req.headers.authorization);
-  console.log('🏆💥❌', req.headers);
   let token;
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith('Bearer')
-  ) {
-    token = req.headers.authorization.split(' ')[1];
+  const cookies = req.headers.cookie.split(' ');
+  if (cookies.length >= 0) {
+    console.log(cookies);
+    cookies.forEach(el => {
+      if (el.startsWith('ksJwt')) {
+        token = el.split('=')[1].replace(';', '');
+      }
+    });
   }
   if (!token) {
     return next(

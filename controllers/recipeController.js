@@ -10,7 +10,7 @@ const User = require('../models/userModel');
 exports.getExampleRecipes = catchAsync(async (req, res, next) => {
   const query = { ...req.query };
   const recipes = await Recipes.find(query);
-  console.log('🚩', req);
+
   res.status(200).json({
     status: 'success',
     requestedAt: req.requestTime,
