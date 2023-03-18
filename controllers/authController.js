@@ -70,16 +70,17 @@ exports.logout = catchAsync(async (req, res, next) => {
 
 ////////////////// CHECK //////////////////
 exports.protect = catchAsync(async (req, res, next) => {
-  // get token
   let token;
-  const cookies = req.headers.cookie.split(' ');
-  if (cookies.length >= 0) {
-    console.log(cookies);
+  let cookies;
+  if (req.headers.cookie) {
+    cookies = req.headers.cookie.split(' ');
+    // if (cookies.length >= 0) {
     cookies.forEach(el => {
       if (el.startsWith('ksJwt')) {
         token = el.split('=')[1].replace(';', '');
       }
     });
+    // }
   }
   if (!token) {
     return next(
@@ -99,7 +100,6 @@ exports.protect = catchAsync(async (req, res, next) => {
   }
   // access to protected route
   req.user = currentUser;
-  console.log('🏆 protect: ', req.user.name);
   ////////////////// TODO ////////////////// if demo res with req
   if (req.user.role === 'demo') console.log('❌ DEMO');
   next();

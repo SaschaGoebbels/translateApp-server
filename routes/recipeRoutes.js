@@ -4,12 +4,13 @@ const authController = require('../controllers/authController');
 const appDataController = require('../controllers/appDataController');
 
 const router = express.Router();
-router.route('/getExampleRecipes').get(
-  ////////////////// TODO //////////////////
-  authController.protect,
-  // authController.restrictTo('admin', 'user', 'demoUser'),
-  recipeController.getExampleRecipes
-);
+router
+  .route('/getExampleRecipes')
+  .get(
+    authController.protect,
+    authController.restrictTo('admin', 'user', 'demo'),
+    recipeController.getExampleRecipes
+  );
 
 router
   .route('/')
