@@ -74,7 +74,10 @@ exports.login = catchAsync(async (req, res, next) => {
 });
 
 exports.logout = catchAsync(async (req, res, next) => {
-  res.cookie('ksJwt', null);
+  res.setHeader(
+    'Set-Cookie',
+    `ksJwt=${null}; Secure; SameSite=None;Path=/;Max-Age=${1}`
+  );
   res.status(200).json({ status: 'logout', token: null });
 });
 
