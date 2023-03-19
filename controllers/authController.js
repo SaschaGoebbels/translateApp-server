@@ -51,6 +51,11 @@ exports.signup = catchAsync(async (req, res, next) => {
   sendLoginToken(newUser, 201, res, req);
 });
 
+const demoUserRecipeList = async user => {
+  const recipes = await Recipes.find();
+  user.appData.recipeList = recipes;
+};
+
 exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
   // if no email or password is provided, return an error
@@ -63,8 +68,7 @@ exports.login = catchAsync(async (req, res, next) => {
     return next(new AppError('Incorrect email or password', 401));
   }
   if (user.role === 'demo') {
-    const recipes = await Recipes.find();
-    user.appData.recipeList = recipes;
+    await demoUserRecipeList(user);
   }
   sendLoginToken(user, 200, res, req);
 });
@@ -80,13 +84,11 @@ exports.protect = catchAsync(async (req, res, next) => {
   let cookies;
   if (req.headers.cookie) {
     cookies = req.headers.cookie.split(' ');
-    // if (cookies.length >= 0) {
     cookies.forEach(el => {
       if (el.startsWith('ksJwt')) {
         token = el.split('=')[1].replace(';', '');
       }
     });
-    // }
   }
   if (!token) {
     return next(
@@ -107,13 +109,13 @@ exports.protect = catchAsync(async (req, res, next) => {
   // access to protected route
   // if demo return recipeList
   ////////////////// TODO ////////////////// if demo res with req
-  if (req.user.role === 'demo') {
-    // const recipes = await Recipes.find();
-    // currentUser.appData.recipeList = recipes;
-    console.log('❌ DEMO', currentUser);
+  if (currentUser.role === 'demo') {
+    console.log('🏆🏆🏆', currentUser);
+    await demoUserRecipeList(currentUser);
+    console.log('❌');
   }
+  console.log('✅');
   req.user = currentUser;
-
   next();
 });
 

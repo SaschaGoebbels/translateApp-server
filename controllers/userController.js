@@ -19,11 +19,11 @@ exports.getAllUsers = catchAsync(async (req, res) => {
     data: { users }
   });
 });
-////////////////// TODO ////////////////// check token res userData
+
+// on app start check token, send back userData
 exports.getAppData = catchAsync(async (req, res) => {
-  const user = await User.findById(req.user.id);
-  console.log(user.appData);
-  res.status(200).json({ appData: user.appData });
+  // console.log('UserController', req.user.appData);
+  res.status(200).json({ appData: req.user.appData });
 });
 
 exports.updateMe = catchAsync(async (req, res, next) => {
