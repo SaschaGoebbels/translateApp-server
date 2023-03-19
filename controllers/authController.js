@@ -6,6 +6,7 @@ const { promisify } = require('util');
 const AppError = require('../utils/appError');
 
 const User = require('./../models/userModel');
+const Recipes = require('../models/recipeModel');
 
 const catchAsync = require('../utils/catchAsync');
 const sendEmail = require('../utils/email');
@@ -27,8 +28,9 @@ const sendLoginToken = async (user, statusCode, res, req) => {
     'Access-Control-Expose-Headers',
     'date, etag, access-control-allow-origin, access-control-allow-credentials'
   );
-  // // // remove password from output
+  // // // remove password & role from output
   user.password = undefined;
+  user.role = undefined;
   res.status(statusCode).json({
     status: 'success',
     data: {
@@ -59,6 +61,10 @@ exports.login = catchAsync(async (req, res, next) => {
   // // if no user or incorrect password, return an error
   if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError('Incorrect email or password', 401));
+  }
+  if (user.role === 'demo') {
+    const recipes = await Recipes.find();
+    user.appData.recipeList = recipes;
   }
   sendLoginToken(user, 200, res, req);
 });
@@ -99,9 +105,15 @@ exports.protect = catchAsync(async (req, res, next) => {
     return next(new AppError('User recently changed password', 401));
   }
   // access to protected route
-  req.user = currentUser;
+  // if demo return recipeList
   ////////////////// TODO ////////////////// if demo res with req
-  if (req.user.role === 'demo') console.log('❌ DEMO');
+  if (req.user.role === 'demo') {
+    // const recipes = await Recipes.find();
+    // currentUser.appData.recipeList = recipes;
+    console.log('❌ DEMO', currentUser);
+  }
+  req.user = currentUser;
+
   next();
 });
 

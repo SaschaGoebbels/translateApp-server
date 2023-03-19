@@ -19,7 +19,7 @@ exports.getAllUsers = catchAsync(async (req, res) => {
     data: { users }
   });
 });
-
+////////////////// TODO ////////////////// check token res userData
 exports.getAppData = catchAsync(async (req, res) => {
   const user = await User.findById(req.user.id);
   console.log(user.appData);
