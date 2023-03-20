@@ -15,7 +15,6 @@ const signToken = id => {
   return jwt.sign({ id }, process.env.JWT_SECRET);
 };
 //
-////////////////// CHECK //////////////////
 const sendLoginToken = async (user, statusCode, res, req) => {
   const token = signToken(user._id);
   res.setHeader(
@@ -31,14 +30,19 @@ const sendLoginToken = async (user, statusCode, res, req) => {
   // // // remove password & role from output
   user.password = undefined;
   user.role = undefined;
+  user.active = undefined;
+  user.createdAt = undefined;
+  user.updatedAt = undefined;
   res.status(statusCode).json({
     status: 'success',
     data: {
       user
     }
   });
+  console.log('💥 send token finish');
 };
 
+////////////////// CHECK //////////////////
 exports.signup = catchAsync(async (req, res, next) => {
   const newUser = await User.create({
     name: req.body.name,
@@ -47,7 +51,6 @@ exports.signup = catchAsync(async (req, res, next) => {
     passwordConfirm: req.body.passwordConfirm
     // appData:{recipeList,}
   });
-  console.log('✅', newUser);
   sendLoginToken(newUser, 201, res, req);
 });
 
@@ -81,7 +84,6 @@ exports.logout = catchAsync(async (req, res, next) => {
   res.status(200).json({ status: 'logout', token: null });
 });
 
-////////////////// CHECK //////////////////
 exports.protect = catchAsync(async (req, res, next) => {
   let token;
   let cookies;
