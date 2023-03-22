@@ -42,14 +42,12 @@ const sendLoginToken = async (user, statusCode, res, req) => {
   console.log('💥 send token finish');
 };
 
-////////////////// CHECK //////////////////
 exports.signup = catchAsync(async (req, res, next) => {
   const newUser = await User.create({
     name: req.body.name,
     email: req.body.email,
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm
-    // appData:{recipeList,}
   });
   sendLoginToken(newUser, 201, res, req);
 });
@@ -154,13 +152,13 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     'host'
   )}/api/v1/users/resetPassword/${resetToken}`;
   const message =
-    'If you did not forgot your password, please ignore this email !';
+    'Wenn Sie ihr Passwort nicht vergessen haben, ignorieren Sie diese email !';
   try {
     await sendEmail({
       email: user.email,
-      subject: 'Password reset token (Valid for 10 minutes)',
-      message,
-      text: resetUrl
+      subject:
+        'Kochstudio - Password zurücksetzen (Link gültig für 10 minuten)',
+      text: `${message} \n \n ${resetUrl}`
     });
     res.status(200).json({ status: 'success', message: 'Token sent to email' });
   } catch (err) {
