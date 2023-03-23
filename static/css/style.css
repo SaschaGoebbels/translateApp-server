@@ -1,0 +1,12 @@
+.mainDiv {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+h1 {
+  text-align: center;
+}
+.marginInput {
+  margin-bottom: 0.8rem;
+}
