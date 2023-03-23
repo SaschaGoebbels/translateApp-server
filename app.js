@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -24,6 +25,11 @@ const appDataRouter = require('./routes/appDataRoutes');
 
 const app = express();
 
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
+
+//serve static files
+app.use(express.static(path.join(__dirname, 'static')));
 app.use(
   cors({
     origin: [
@@ -77,6 +83,10 @@ app.use((req, res, next) => {
 });
 
 // routes
+app.get('/', (req, res) => {
+  res.status(200).render('passwordReset', { userName: 'req.userName' });
+});
+
 app.use('/api/v1/recipe', recipeRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/appData', appDataRouter);
