@@ -169,6 +169,16 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   }
 });
 
+// render page to reset password
+exports.submitPassword = catchAsync(async (req, res, next) => {
+  console.log('✅', req);
+  res.status(200).render('passwordReset', {
+    userName: 'req.userName',
+    token: req.token,
+    confirmStatus: false
+  });
+});
+
 // decrypt token
 const hashedToken = encryptedToken => {
   return crypto
@@ -197,7 +207,8 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   user.passwordResetExpires = undefined;
   await user.save();
   // login and return new jsonwebtoken
-  sendLoginToken(user, 200, res);
+  res.status(200).json({ status: 'success' });
+  // sendLoginToken(user, 200, res); //DELETE not app page ! user should go to app and login again
 });
 
 exports.changePassword = catchAsync(async (req, res, next) => {

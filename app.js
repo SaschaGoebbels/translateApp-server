@@ -22,6 +22,7 @@ const globalErrorHandler = require('./controllers/errorController');
 const recipeRouter = require('./routes/recipeRoutes');
 const userRouter = require('./routes/userRoutes');
 const appDataRouter = require('./routes/appDataRoutes');
+const authController = require('./controllers/authController');
 
 const app = express();
 
@@ -63,6 +64,8 @@ app.use('/api', limiter);
 // limit body size to 10kb to prevent abuse
 app.use(express.json({ limit: '10kb' }));
 
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
+
 // data sanitization against NoSQL query injection (filter ou all $ and dots)
 app.use(mongoSanitize());
 
@@ -83,9 +86,16 @@ app.use((req, res, next) => {
 });
 
 // routes
-app.get('/', (req, res) => {
-  res.status(200).render('passwordReset', { userName: 'req.userName' });
-});
+app.get(
+  '/submitPassword',
+  // authController.submitPassword
+  (req, res) => {
+    res.status(200).render('submitPassword', {
+      userName: 'req.userName',
+      confirmStatus: false
+    });
+  }
+);
 
 app.use('/api/v1/recipe', recipeRouter);
 app.use('/api/v1/users', userRouter);
