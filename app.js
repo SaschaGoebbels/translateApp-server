@@ -86,16 +86,18 @@ app.use((req, res, next) => {
 });
 
 // routes
-app.get(
-  '/submitPassword',
-  // authController.submitPassword
-  (req, res) => {
-    res.status(200).render('submitPassword', {
-      userName: 'req.userName',
-      confirmStatus: false
-    });
-  }
-);
+// // // app.get(
+// // //   '/submitPassword/:token',
+// // //   // authController.submitPassword
+// // //   (req, res) => {
+// // //     const parameters = req.body;
+// // //     parameters.token = req.token;
+// // //     res.status(200).render('submitPassword', {
+// // //       userName: 'req.userName',
+// // //       confirmStatus: false
+// // //     });
+// // //   }
+// // // );
 
 app.use('/api/v1/recipe', recipeRouter);
 app.use('/api/v1/users', userRouter);

@@ -19,7 +19,10 @@ router.patch('/updateMe', authController.protect, userController.updateMe);
 router.delete('/deleteMe', authController.protect, userController.deleteMe);
 
 router.post('/forgotPassword', authController.forgotPassword);
-router.post('/submitPassword/:token', authController.submitPassword);
+// router.get('/submitPassword/:token', authController.submitPassword);
+// router.get('/submitPassword:token', () => {
+//   console.log('✅ sub');
+// });
 router.patch('/resetPassword/:token', authController.resetPassword);
 
 router.get('/appData', authController.protect, userController.getAppData);
@@ -32,7 +35,7 @@ router.get('/appData', authController.protect, userController.getAppData);
 // // //     userController.getAllUsers
 // // //   )
 // // //   .post(userController.createUser);
-
+router.route('/submitPassword').get(authController.submitPassword);
 router
   .route('/:id')
   .get(userController.getUser)
