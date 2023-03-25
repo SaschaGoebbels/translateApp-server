@@ -150,7 +150,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   // send token via mail
   const resetUrl = `${req.protocol}://${req.get(
     'host'
-  )}/api/v1/users/resetPassword/${resetToken}`;
+  )}/api/v1/users/submitPassword/?token=${resetToken}`;
   const message =
     'Wenn Sie ihr Passwort nicht vergessen haben, ignorieren Sie diese email !';
   try {
@@ -174,9 +174,11 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 exports.submitPassword = catchAsync(async (req, res, next) => {
   console.log('❌ token', req.query.token);
   res.status(200).render('submitPassword', {
-    userName: 'req.userName',
-    token: req.query.token,
-    confirmStatus: false
+    data: JSON.stringify({
+      userName: 'req.userName',
+      token: req.query.token,
+      confirmStatus: false
+    })
   });
 });
 
@@ -192,9 +194,11 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   // first encrypt the token get user by provided token
   const user = await User.findOne({
     passwordResetToken: hashedToken(req.params.token),
+
     //$gt grater than mongoDb will check
     passwordResetExpires: { $gt: Date.now() }
   });
+  console.log('✅ Reset User', user);
   // if token expired return error
   if (!user) {
     return next(
