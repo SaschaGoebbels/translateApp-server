@@ -26,6 +26,7 @@ router.post('/forgotPassword', authController.forgotPassword);
 router.patch('/resetPassword/:token', authController.resetPassword);
 
 router.get('/appData', authController.protect, userController.getAppData);
+
 // get users not needed, maybe later
 // // // router
 // // //   .route('/')
@@ -35,7 +36,17 @@ router.get('/appData', authController.protect, userController.getAppData);
 // // //     userController.getAllUsers
 // // //   )
 // // //   .post(userController.createUser);
+
 router.route('/submitPassword').get(authController.submitPassword);
+// router.route('/submitPassword/:token').get(authController.submitPassword);
+// router.route('/').get((req, res) => {
+//   res.status(200).render('submitPassword', {
+//     userName: 'req.userName',
+//     token: req.token,
+//     confirmStatus: false
+//   });
+// });
+
 router
   .route('/:id')
   .get(userController.getUser)

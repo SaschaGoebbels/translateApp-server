@@ -174,7 +174,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 // render page to reset password
 exports.submitPassword = catchAsync(async (req, res, next) => {
   console.log('✅', req);
-  console.log('❌', req.params.token);
+  console.log('❌ token', req.query.token);
   res.status(200).render('submitPassword', {
     userName: 'req.userName',
     token: req.token,
