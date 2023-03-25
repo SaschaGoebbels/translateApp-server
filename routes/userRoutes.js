@@ -23,6 +23,9 @@ router.post('/forgotPassword', authController.forgotPassword);
 // router.get('/submitPassword:token', () => {
 //   console.log('✅ sub');
 // });
+
+router.route('/submitPassword').get(authController.submitPassword);
+
 router.patch('/resetPassword/:token', authController.resetPassword);
 
 router.get('/appData', authController.protect, userController.getAppData);
@@ -36,16 +39,6 @@ router.get('/appData', authController.protect, userController.getAppData);
 // // //     userController.getAllUsers
 // // //   )
 // // //   .post(userController.createUser);
-
-router.route('/submitPassword').get(authController.submitPassword);
-// router.route('/submitPassword/:token').get(authController.submitPassword);
-// router.route('/').get((req, res) => {
-//   res.status(200).render('submitPassword', {
-//     userName: 'req.userName',
-//     token: req.token,
-//     confirmStatus: false
-//   });
-// });
 
 router
   .route('/:id')

@@ -29,8 +29,9 @@ const app = express();
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
+app.use('/styles', express.static(path.join(__dirname, '/css/style.css'))); //DELETE doesn't work
 //serve static files
-app.use(express.static(path.join(__dirname, 'static')));
+// app.use(express.static(path.join(__dirname, 'static')));
 app.use(
   cors({
     origin: [
