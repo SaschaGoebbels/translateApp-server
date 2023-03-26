@@ -175,7 +175,6 @@ exports.submitPassword = catchAsync(async (req, res, next) => {
   console.log('❌ token', req.query.token);
   res.status(200).render('submitPassword', {
     data: JSON.stringify({
-      userName: 'req.userName',
       token: req.query.token,
       confirmStatus: false
     })
@@ -198,7 +197,9 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
     //$gt grater than mongoDb will check
     passwordResetExpires: { $gt: Date.now() }
   });
-  console.log('✅ Reset User', user);
+  // console.log('✅ Reset User', user);
+  console.log('✅ res obj = ', res);
+  // console.log('✅ req.header = ', req.headers);
   // if token expired return error
   if (!user) {
     return next(
@@ -211,7 +212,6 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   user.passwordResetToken = undefined;
   user.passwordResetExpires = undefined;
   await user.save();
-  // login and return new jsonwebtoken
   res.status(200).json({ status: 'success' });
 });
 

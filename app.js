@@ -38,7 +38,7 @@ app.use(
       'https://papaya-crumble-be16e3.netlify.app/',
       'https://cyan-pleasant-chicken.cyclic.app',
       'http://localhost:3001',
-      'http://127.0.0.1'
+      'http://127.0.0.1:3000'
     ],
     credentials: true
   })
