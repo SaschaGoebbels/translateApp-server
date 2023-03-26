@@ -19,13 +19,7 @@ router.patch('/updateMe', authController.protect, userController.updateMe);
 router.delete('/deleteMe', authController.protect, userController.deleteMe);
 
 router.post('/forgotPassword', authController.forgotPassword);
-// router.get('/submitPassword/:token', authController.submitPassword);
-// router.get('/submitPassword:token', () => {
-//   console.log('✅ sub');
-// });
-
 router.route('/submitPassword').get(authController.submitPassword);
-
 router.patch('/resetPassword/:token', authController.resetPassword);
 
 router.get('/appData', authController.protect, userController.getAppData);

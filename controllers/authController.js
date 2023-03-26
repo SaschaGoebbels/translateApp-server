@@ -117,7 +117,6 @@ exports.protect = catchAsync(async (req, res, next) => {
     await demoUserRecipeList(currentUser);
     console.log('❌');
   }
-  console.log('✅');
   req.user = currentUser;
   next();
 });
@@ -152,7 +151,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     'host'
   )}/api/v1/users/submitPassword/?token=${resetToken}`;
   const message =
-    'Wenn Sie ihr Passwort nicht vergessen haben, ignorieren Sie diese email !';
+    'Bitte klicken Sie auf den Link um ein neues Passwort für Ihren Account zu vergeben. \n\nWenn Sie diese Email nicht angefordert haben, ignorieren Sie diese Nachricht !';
   try {
     await sendEmail({
       email: user.email,
