@@ -169,14 +169,11 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   }
 });
 
-////////////////// CHECK //////////////////
 // render page to reset password
 exports.submitPassword = catchAsync(async (req, res, next) => {
-  console.log('❌ token', req.query.token);
   res.status(200).render('submitPassword', {
     data: JSON.stringify({
-      token: req.query.token,
-      confirmStatus: false
+      token: req.query.token
     })
   });
 });
