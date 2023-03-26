@@ -197,9 +197,6 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
     //$gt grater than mongoDb will check
     passwordResetExpires: { $gt: Date.now() }
   });
-  // console.log('✅ Reset User', user);
-  console.log('✅ res obj = ', res);
-  // console.log('✅ req.header = ', req.headers);
   // if token expired return error
   if (!user) {
     return next(
