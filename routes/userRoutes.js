@@ -23,21 +23,17 @@ router.route('/submitPassword').get(authController.submitPassword);
 router.patch('/resetPassword/:token', authController.resetPassword);
 
 router.get('/appData', authController.protect, userController.getAppData);
+router.post('/appData', authController.protect, userController.postAppData);
+router.post(
+  '/updateAppData',
+  authController.protect,
+  userController.postUpdateAppData
+);
 
-// get users not needed, maybe later
-// // // router
-// // //   .route('/')
-// // //   .get(
-// // //     authController.protect,
-// // //     authController.restrictTo('admin'),
-// // //     userController.getAllUsers
-// // //   )
-// // //   .post(userController.createUser);
-
-router
-  .route('/:id')
-  .get(userController.getUser)
-  .patch(userController.updateUser)
-  .delete(userController.deleteUser);
+// // router DELETE
+// //   .route('/:id')
+// //   .get(userController.getUser)
+// //   .patch(userController.updateUser)
+// //   .delete(userController.deleteUser);
 
 module.exports = router;

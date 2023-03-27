@@ -63,9 +63,9 @@ app.use('/api', limiter);
 
 // body parsing middleware, reading data from body into req.body
 // limit body size to 10kb to prevent abuse
-app.use(express.json({ limit: '10kb' }));
+app.use(express.json({ limit: '200kb' }));
 
-app.use(express.urlencoded({ extended: true, limit: '10kb' }));
+app.use(express.urlencoded({ extended: true, limit: '200kb' }));
 
 // data sanitization against NoSQL query injection (filter ou all $ and dots)
 app.use(mongoSanitize());
