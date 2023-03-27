@@ -61,12 +61,17 @@ exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
   // if no email or password is provided, return an error
   if (!email || !password) {
-    return next(new AppError('Please provide an email and password', 400));
+    return next(new AppError('Bitte Email und Passwort angeben !', 400));
   }
   const user = await User.findOne({ email }).select('+password');
   // // if no user or incorrect password, return an error
   if (!user || !(await user.correctPassword(password, user.password))) {
-    return next(new AppError('Incorrect email or password', 401));
+    return next(
+      new AppError(
+        'Die Daten sind nicht korrekt bitte prüfen Sie Ihre Eingabe !',
+        401
+      )
+    );
   }
   if (user.role === 'demo') {
     await demoUserRecipeList(user);
@@ -95,7 +100,10 @@ exports.protect = catchAsync(async (req, res, next) => {
   }
   if (!token) {
     return next(
-      new AppError('You need to be logged in to perform this action', 401)
+      new AppError(
+        'Sie müssen sich einloggen um diese Action auszuführen !',
+        401
+      )
     );
   }
   // validate token
@@ -103,11 +111,13 @@ exports.protect = catchAsync(async (req, res, next) => {
   // check user exists
   const currentUser = await User.findById(decoded.id);
   if (!currentUser) {
-    return next(new AppError('User not found', 401));
+    return next(new AppError('Es wurde kein Benutzerkonto gefunden !', 401));
   }
   // check if password is changed after the token
   if (await currentUser.changePasswordAfter(decoded.iat)) {
-    return next(new AppError('User recently changed password', 401));
+    return next(
+      new AppError('Der Benutzer hat das Passwort kürzlich geändert !', 401)
+    );
   }
   // access to protected route
   // if demo return recipeList
@@ -127,10 +137,10 @@ exports.restrictTo = (...roles) => {
       console.log('restricted', !roles.includes(req.user.role));
       // error doubled because otherwise no output
       next(
-        new AppError('You do not have permission to perform this action', 403)
+        new AppError('Sie haben keine Berechtigung für diese Action !', 403)
       );
       return next(
-        new AppError('You do not have permission to perform this action', 403)
+        new AppError('Sie haben keine Berechtigung für diese Action !', 403)
       );
     }
     next();
@@ -141,7 +151,9 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   // get user by provided email
   const user = await User.findOne({ email: req.body.email });
   if (!user) {
-    return next(new AppError('There is no user with that email', 404));
+    return next(
+      new AppError('Zu dieser Emailadresse gibt es kein Benutzerkonto !', 404)
+    );
   }
   // generate reset token
   const resetToken = user.createPasswordResetToken();
@@ -159,12 +171,15 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
         'Kochstudio - Password zurücksetzen (Link gültig für 10 minuten)',
       text: `${message} \n \n ${resetUrl}`
     });
-    res.status(200).json({ status: 'success', message: 'Token sent to email' });
+    res.status(200).json({
+      status: 'success',
+      message: 'Es wurde ein Reset-Token an die Emailadresse gesendet.'
+    });
   } catch (err) {
     user.passwordResetToken = undefined;
     user.passwordResetExpires = undefined;
     await user.save({ validateBeforeSave: false });
-    return next(new AppError('Email could not be sent', 500));
+    return next(new AppError('Die Email konnte nicht gesendet werden !', 500));
   }
 });
 
@@ -196,7 +211,10 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   // if token expired return error
   if (!user) {
     return next(
-      new AppError('Password reset token is invalid or has expired', 400)
+      new AppError(
+        'Der Password-Reset-Token ist ungültig oder abgelaufen !',
+        400
+      )
     );
   }
   // update password
@@ -214,7 +232,7 @@ exports.changePassword = catchAsync(async (req, res, next) => {
 
   // check posted password -> instant method on user model to compare the bcryptjs password
   if (!(await user.correctPassword(req.body.currentPassword, user.password))) {
-    return next(new AppError('Current password is incorrect', 401));
+    return next(new AppError('Das Password ist falsch !', 401));
   }
   // update password -> validation is outsourced to user model
   user.password = req.body.password;
