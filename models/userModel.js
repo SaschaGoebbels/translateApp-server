@@ -41,6 +41,14 @@ const userSchema = new mongoose.Schema({
   active: { type: Boolean, default: true, select: false },
   createdAt: { type: Date, default: Date.now, select: false },
   updatedAt: { type: Date, default: Date.now, select: false },
+  //DELETE this line
+  test: {
+    type: Array,
+    default: [
+      { name: 'aaa', id: 1 },
+      { name: 'bbb', id: 2 }
+    ]
+  },
   appData: {
     type: Object,
     default: {

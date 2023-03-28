@@ -25,15 +25,28 @@ exports.postAppData = catchAsync(async (req, res) => {
   res.status(200).json({ status: 'success' });
 });
 
-////////////////// TODO ////////////////// ///////////////// BOOKMARK ///////////////// B
-// upload all app data // used for exampleList
-exports.postUpdateAppData = catchAsync(async (req, res) => {
-  const { settings } = req.body.settings;
-  console.log('❌', settings);
-  // await User.findByIdAndUpdate(req.user.id, { appData });
+// update settings
+exports.postUpdateSettings = catchAsync(async (req, res) => {
+  const settings = { ...req.body.settings };
   await User.findByIdAndUpdate(req.user.id, {
-    appData: { settings: settings }
+    $set: { 'appData.settings': settings }
   });
+  //==================================================================
+  req.user.role = undefined;
+  res.status(200).json({ status: 'success' });
+});
+
+////////////////// TODO ////////////////// ///////////////// BOOKMARK ///////////////// B
+exports.postUpdateSettings = catchAsync(async (req, res) => {
+  const settings = { ...req.body.settings };
+  const user = await User.findByIdAndUpdate(
+    req.user.id,
+    {
+      $set: { 'appData.settings': settings }
+    },
+    { new: true, upsert: true }
+  );
+  //==================================================================
   req.user.role = undefined;
   res.status(200).json({ status: 'success' });
 });

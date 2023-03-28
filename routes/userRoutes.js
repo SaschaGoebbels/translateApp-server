@@ -25,9 +25,9 @@ router.patch('/resetPassword/:token', authController.resetPassword);
 router.get('/appData', authController.protect, userController.getAppData);
 router.post('/appData', authController.protect, userController.postAppData);
 router.post(
-  '/updateAppData',
+  '/updateSettings',
   authController.protect,
-  userController.postUpdateAppData
+  userController.postUpdateSettings
 );
 
 // // router DELETE
