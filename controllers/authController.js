@@ -39,17 +39,16 @@ const sendLoginToken = async (user, statusCode, res, req) => {
       user
     }
   });
-  console.log('💥 send token finish');
 };
 
 exports.signup = catchAsync(async (req, res, next) => {
-  const newUser = await User.create({
+  await User.create({
     name: req.body.name,
     email: req.body.email,
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm
   });
-  sendLoginToken(newUser, 201, res, req);
+  res.status(200).json({ status: 'success' });
 });
 
 const demoUserRecipeList = async user => {
