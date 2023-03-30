@@ -29,11 +29,10 @@ router.post(
   authController.protect,
   userController.postUpdateSettings
 );
-
-// // router DELETE
-// //   .route('/:id')
-// //   .get(userController.getUser)
-// //   .patch(userController.updateUser)
-// //   .delete(userController.deleteUser);
+router.delete(
+  '/deleteRecipeList',
+  authController.protect,
+  userController.deleteRecipeList
+);
 
 module.exports = router;

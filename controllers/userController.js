@@ -51,6 +51,20 @@ exports.postUpdateSettings = catchAsync(async (req, res) => {
   res.status(200).json({ status: 'success' });
 });
 
+////////////////// TODO ////////////////// ///////////////// BOOKMARK ///////////////// B
+exports.deleteRecipeList = catchAsync(async (req, res) => {
+  const user = User.findByIdAndUpdate(
+    req.user.id,
+    {
+      $set: { 'appData.recipeList': [] },
+      $set: { 'appData.weeklyPlan': [] },
+      $set: { 'appData.shoppingList': [] }
+    },
+    { new: true, upsert: true }
+  );
+  res.status(200).json({ status: 'success' });
+});
+
 exports.updateMe = catchAsync(async (req, res, next) => {
   // error if post passwordData
   console.log(req.body);
