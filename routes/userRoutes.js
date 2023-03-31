@@ -29,7 +29,7 @@ router.post(
   authController.protect,
   userController.postUpdateSettings
 );
-router.delete(
+router.post(
   '/deleteRecipeList',
   authController.protect,
   userController.deleteRecipeList

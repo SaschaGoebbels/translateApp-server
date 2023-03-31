@@ -36,17 +36,15 @@ exports.postUpdateSettings = catchAsync(async (req, res) => {
   res.status(200).json({ status: 'success' });
 });
 
-////////////////// TODO ////////////////// ///////////////// BOOKMARK ///////////////// B
 exports.postUpdateSettings = catchAsync(async (req, res) => {
-  const settings = { ...req.body.settings };
   const user = await User.findByIdAndUpdate(
     req.user.id,
     {
-      $set: { 'appData.settings': settings }
+      $set: { 'appData.settings': { ...req.body } }
     },
     { new: true, upsert: true }
   );
-  //==================================================================
+  // ==================================================================
   req.user.role = undefined;
   res.status(200).json({ status: 'success' });
 });
@@ -56,13 +54,16 @@ exports.deleteRecipeList = catchAsync(async (req, res) => {
   const user = User.findByIdAndUpdate(
     req.user.id,
     {
-      $set: { 'appData.recipeList': [] },
-      $set: { 'appData.weeklyPlan': [] },
-      $set: { 'appData.shoppingList': [] }
+      $set: {
+        'appData.recipeList': []
+        // 'appData.weeklyPlan': [],
+        // 'appData.shoppingList': []
+      }
     },
-    { new: true, upsert: true }
+    { new: true }
   );
-  res.status(200).json({ status: 'success' });
+  console.log('❌', user);
+  res.status(200).json({ status: 'success', data: user.appData });
 });
 
 exports.updateMe = catchAsync(async (req, res, next) => {
