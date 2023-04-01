@@ -37,8 +37,18 @@ router.post(
 
 router
   .route('/recipe/:id/:list/')
-  .post(authController.protect, userController.postRecipe)
-  .patch(authController.protect, userController.updateRecipe)
-  .delete(authController.protect, userController.deleteRecipe);
+  .post(authController.protect, userController.postRecipe);
+
+router.post(
+  '/recipeDelete/:id/:list/',
+  authController.protect,
+  userController.deleteRecipe
+);
+
+router.post(
+  '/recipeUpdate/:id/:list/',
+  authController.protect,
+  userController.updateRecipe
+);
 
 module.exports = router;

@@ -64,60 +64,94 @@ exports.deleteRecipeList = catchAsync(async (req, res) => {
   console.log('❌', user);
   res.status(200).json({ status: 'success', data: user.appData });
 });
+
 ///////////////////////////////////////////////////////////////////////
-////////////////// TODO ////////////////// ///////////////// BOOKMARK ///////////////// B
 exports.postRecipe = catchAsync(async (req, res) => {
-  console.log('✅', req.body);
-  console.log('✅', req.params);
-  const user = await User.findByIdAndUpdate(
-    req.user.id,
-    {
-      // // $push: {
-      // //   'appData.recipeList': req.body
-      // //   // 'appData.weeklyPlan': [],
-      // //   // 'appData.shoppingList': []
-      // // }
-    },
-    { new: true, upsert: true }
-  );
-  console.log('❌', user);
-  res.status(200).json({ status: 'success', data: user.appData });
+  let mongooseUpdate = {
+    $push: {
+      'appData.recipeList': req.body.recipe
+    }
+  };
+  if (req.params.list === 'shoppingList') {
+    mongooseUpdate = {
+      $push: {
+        'appData.shoppingList': req.body.recipe
+      }
+    };
+  }
+  if (req.params.list === 'weeklyPlan') {
+    mongooseUpdate = {
+      $push: {
+        'appData.weeklyPlan': req.body.recipe
+      }
+    };
+  }
+  await User.findByIdAndUpdate(req.user.id, mongooseUpdate, {
+    new: true,
+    upsert: true
+  });
+  res.status(200).json({ status: 'success' });
 });
 
-///////////////// BOOKMARK ///////////////// B
 exports.updateRecipe = catchAsync(async (req, res) => {
-  const recipeId = req.params.id;
-  const user = await User.findByIdAndUpdate(
-    req.user.id,
-    {
-      // $push: {
-      //   'appData.recipeList':
-      //   // 'appData.weeklyPlan': [],
-      //   // 'appData.shoppingList': []
-      // }
-    },
-    { new: true, upsert: true }
-  );
-  console.log('❌', user);
-  res.status(200).json({ status: 'success', data: user.appData });
-});
-
-///////////////// BOOKMARK ///////////////// B
-exports.deleteRecipe = catchAsync(async (req, res) => {
-  const recipeId = req.params.id;
-  const user = await User.findByIdAndUpdate(
+  console.log('✅', req.body.recipe);
+  const user = await User.findById(req.user.id);
+  const index = user.appData.recipeList
+    .map(e => e.id)
+    .indexOf(req.body.recipe.id);
+  user.appData.recipeList.splice(index, 1, req.body.recipe);
+  await User.findByIdAndUpdate(
     req.user.id,
     {
       $set: {
-        'appData.recipeList': [],
-        'appData.weeklyPlan': [],
-        'appData.shoppingList': []
+        'appData.recipeList': user.appData.recipeList
       }
     },
-    { new: true, upsert: true }
+    {
+      new: true,
+      upsert: true
+    }
   );
-  console.log('❌', user);
   res.status(200).json({ status: 'success', data: user.appData });
+});
+
+////////////////// TODO ////////////////// ///////////////// BOOKMARK ///////////////// B
+exports.deleteRecipe = catchAsync(async (req, res) => {
+  console.log('✅', req.body.recipe);
+  const onRecipeDelete = (recipe, array) => {
+    return array.filter(el => {
+      if (el.id !== recipe.id) return el;
+    });
+  };
+  const user = await User.findById(req.user.id);
+  user.appData.recipeList = onRecipeDelete(
+    req.body.recipe,
+    user.appData.recipeList
+  );
+  user.appData.shoppingList = onRecipeDelete(
+    req.body.recipe,
+    user.appData.shoppingList
+  );
+  user.appData.weeklyPlan = onRecipeDelete(
+    req.body.recipe,
+    user.appData.weeklyPlan
+  );
+  console.log('✅', user.appData.recipeList);
+  await User.findByIdAndUpdate(
+    req.user.id,
+    {
+      $set: {
+        'appData.recipeList': user.appData.recipeList,
+        'appData.shoppingList': user.appData.shoppingList,
+        'appData.weeklyPlan': user.appData.weeklyPlan
+      }
+    },
+    {
+      new: true,
+      upsert: true
+    }
+  );
+  res.status(200).json({ status: 'success' });
 });
 ///////////////////////////////////////////////////////////////////////////
 

@@ -38,7 +38,8 @@ app.use(
       'https://papaya-crumble-be16e3.netlify.app/',
       'https://cyan-pleasant-chicken.cyclic.app',
       'http://localhost:3001',
-      'http://127.0.0.1:3000'
+      'http://127.0.0.1:3000',
+      '*'
     ],
     credentials: true
   })
@@ -63,9 +64,9 @@ app.use('/api', limiter);
 
 // body parsing middleware, reading data from body into req.body
 // limit body size to 10kb to prevent abuse
-app.use(express.json({ limit: '200kb' }));
+app.use(express.json({ limit: '500kb' }));
 
-app.use(express.urlencoded({ extended: true, limit: '200kb' }));
+app.use(express.urlencoded({ extended: true, limit: '500kb' }));
 
 // data sanitization against NoSQL query injection (filter ou all $ and dots)
 app.use(mongoSanitize());
