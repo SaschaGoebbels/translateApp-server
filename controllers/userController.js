@@ -49,7 +49,6 @@ exports.postUpdateSettings = catchAsync(async (req, res) => {
   res.status(200).json({ status: 'success' });
 });
 
-////////////////// TODO ////////////////// ///////////////// BOOKMARK ///////////////// B
 exports.deleteRecipeList = catchAsync(async (req, res) => {
   const user = await User.findByIdAndUpdate(
     req.user.id,
@@ -65,6 +64,62 @@ exports.deleteRecipeList = catchAsync(async (req, res) => {
   console.log('❌', user);
   res.status(200).json({ status: 'success', data: user.appData });
 });
+///////////////////////////////////////////////////////////////////////
+////////////////// TODO ////////////////// ///////////////// BOOKMARK ///////////////// B
+exports.postRecipe = catchAsync(async (req, res) => {
+  console.log('✅', req.body);
+  console.log('✅', req.params);
+  const user = await User.findByIdAndUpdate(
+    req.user.id,
+    {
+      // // $push: {
+      // //   'appData.recipeList': req.body
+      // //   // 'appData.weeklyPlan': [],
+      // //   // 'appData.shoppingList': []
+      // // }
+    },
+    { new: true, upsert: true }
+  );
+  console.log('❌', user);
+  res.status(200).json({ status: 'success', data: user.appData });
+});
+
+///////////////// BOOKMARK ///////////////// B
+exports.updateRecipe = catchAsync(async (req, res) => {
+  const recipeId = req.params.id;
+  const user = await User.findByIdAndUpdate(
+    req.user.id,
+    {
+      // $push: {
+      //   'appData.recipeList':
+      //   // 'appData.weeklyPlan': [],
+      //   // 'appData.shoppingList': []
+      // }
+    },
+    { new: true, upsert: true }
+  );
+  console.log('❌', user);
+  res.status(200).json({ status: 'success', data: user.appData });
+});
+
+///////////////// BOOKMARK ///////////////// B
+exports.deleteRecipe = catchAsync(async (req, res) => {
+  const recipeId = req.params.id;
+  const user = await User.findByIdAndUpdate(
+    req.user.id,
+    {
+      $set: {
+        'appData.recipeList': [],
+        'appData.weeklyPlan': [],
+        'appData.shoppingList': []
+      }
+    },
+    { new: true, upsert: true }
+  );
+  console.log('❌', user);
+  res.status(200).json({ status: 'success', data: user.appData });
+});
+///////////////////////////////////////////////////////////////////////////
 
 exports.updateMe = catchAsync(async (req, res, next) => {
   // error if post passwordData

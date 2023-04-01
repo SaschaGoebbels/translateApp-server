@@ -35,4 +35,10 @@ router.post(
   userController.deleteRecipeList
 );
 
+router
+  .route('/recipe/:id/:list/')
+  .post(authController.protect, userController.postRecipe)
+  .patch(authController.protect, userController.updateRecipe)
+  .delete(authController.protect, userController.deleteRecipe);
+
 module.exports = router;
