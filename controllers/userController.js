@@ -51,16 +51,16 @@ exports.postUpdateSettings = catchAsync(async (req, res) => {
 
 ////////////////// TODO ////////////////// ///////////////// BOOKMARK ///////////////// B
 exports.deleteRecipeList = catchAsync(async (req, res) => {
-  const user = User.findByIdAndUpdate(
+  const user = await User.findByIdAndUpdate(
     req.user.id,
     {
       $set: {
-        'appData.recipeList': []
-        // 'appData.weeklyPlan': [],
-        // 'appData.shoppingList': []
+        'appData.recipeList': [],
+        'appData.weeklyPlan': [],
+        'appData.shoppingList': []
       }
     },
-    { new: true }
+    { new: true, upsert: true }
   );
   console.log('❌', user);
   res.status(200).json({ status: 'success', data: user.appData });
