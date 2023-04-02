@@ -115,7 +115,6 @@ exports.updateRecipe = catchAsync(async (req, res) => {
   res.status(200).json({ status: 'success', data: user.appData });
 });
 
-////////////////// TODO ////////////////// ///////////////// BOOKMARK ///////////////// B
 exports.deleteRecipe = catchAsync(async (req, res) => {
   console.log('✅', req.body.recipe);
   const onRecipeDelete = (recipe, array) => {
@@ -154,6 +153,7 @@ exports.deleteRecipe = catchAsync(async (req, res) => {
   res.status(200).json({ status: 'success' });
 });
 ///////////////////////////////////////////////////////////////////////////
+////////////////// TODO ////////////////// ///////////////// BOOKMARK ///////////////// B
 
 exports.updateMe = catchAsync(async (req, res, next) => {
   // error if post passwordData
