@@ -152,15 +152,45 @@ exports.deleteRecipe = catchAsync(async (req, res) => {
   );
   res.status(200).json({ status: 'success' });
 });
-///////////////////////////////////////////////////////////////////////////
-////////////////// TODO ////////////////// ///////////////// BOOKMARK ///////////////// B
+
 exports.updateWeeklyPlan = catchAsync(async (req, res, next) => {
-  console.log(req.body);
   await User.findByIdAndUpdate(
     req.user.id,
     {
       $set: {
         'appData.weeklyPlan': req.body.updatePlanList
+      }
+    },
+    {
+      new: true,
+      upsert: true
+    }
+  );
+  res.status(200).json({ status: 'success' });
+});
+
+exports.updateShoppingList = catchAsync(async (req, res, next) => {
+  await User.findByIdAndUpdate(
+    req.user.id,
+    {
+      $set: {
+        'appData.shoppingList': req.body.updatePlanList
+      }
+    },
+    {
+      new: true,
+      upsert: true
+    }
+  );
+  res.status(200).json({ status: 'success' });
+});
+
+exports.shopSum = catchAsync(async (req, res, next) => {
+  await User.findByIdAndUpdate(
+    req.user.id,
+    {
+      $set: {
+        'appData.ingredientsSumListState': req.body.updatePlanList
       }
     },
     {

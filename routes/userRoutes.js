@@ -56,5 +56,11 @@ router.post(
   authController.protect,
   userController.updateWeeklyPlan
 );
+router.post(
+  '/shoppingList',
+  authController.protect,
+  userController.updateShoppingList
+);
+router.post('/shopSum', authController.protect, userController.shopSum);
 
 module.exports = router;
