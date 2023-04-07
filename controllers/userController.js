@@ -154,6 +154,22 @@ exports.deleteRecipe = catchAsync(async (req, res) => {
 });
 ///////////////////////////////////////////////////////////////////////////
 ////////////////// TODO ////////////////// ///////////////// BOOKMARK ///////////////// B
+exports.updateWeeklyPlan = catchAsync(async (req, res, next) => {
+  console.log(req.body);
+  await User.findByIdAndUpdate(
+    req.user.id,
+    {
+      $set: {
+        'appData.weeklyPlan': req.body.updatePlanList
+      }
+    },
+    {
+      new: true,
+      upsert: true
+    }
+  );
+  res.status(200).json({ status: 'success' });
+});
 
 exports.updateMe = catchAsync(async (req, res, next) => {
   // error if post passwordData

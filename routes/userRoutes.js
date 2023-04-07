@@ -51,4 +51,10 @@ router.post(
   userController.updateRecipe
 );
 
+router.post(
+  '/weeklyPlan',
+  authController.protect,
+  userController.updateWeeklyPlan
+);
+
 module.exports = router;
