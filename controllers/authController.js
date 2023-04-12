@@ -23,9 +23,13 @@ const sendLoginToken = async (user, statusCode, res, req) => {
   );
   res.set(
     'Access-Control-Allow-Origin',
-    req.headers.origin,
     'https://kochstudio-react.netlify.app/'
   );
+  // // // res.set( CHECK
+  // // //   'Access-Control-Allow-Origin',
+  // // //   req.headers.origin,
+  // // //   'https://kochstudio-react.netlify.app/'
+  // // // );
   res.set('Access-Control-Allow-Credentials', 'true');
   res.set(
     'Access-Control-Expose-Headers',
