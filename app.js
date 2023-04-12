@@ -37,6 +37,7 @@ app.use(
     origin: [
       'https://papaya-crumble-be16e3.netlify.app/',
       'https://cyan-pleasant-chicken.cyclic.app',
+      'https://kochstudio-react.netlify.app/',
       'http://localhost:3001',
       'http://127.0.0.1:3000',
       '*'
