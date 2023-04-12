@@ -23,6 +23,7 @@ router.route('/submitPassword').get(authController.submitPassword);
 router.patch('/resetPassword/:token', authController.resetPassword);
 
 router.get('/appData', authController.protect, userController.getAppData);
+// router.get('/appData', authController.protect, userController.getAppData);CHECK
 router.post('/appData', authController.protect, userController.postAppData);
 router.post(
   '/updateSettings',

@@ -34,7 +34,7 @@ app.use('/styles', express.static(path.join(__dirname, '/css/style.css'))); //DE
 // app.use(express.static(path.join(__dirname, 'static')));
 app.use(
   cors({
-    origin: 'https://kochstudio-react.netlify.app/',
+    origin: 'https://kochstudio-react.netlify.app',
     // 'http://localhost:3001',
     // 'http://127.0.0.1:3000',
     // '*'
