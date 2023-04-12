@@ -21,15 +21,11 @@ const sendLoginToken = async (user, statusCode, res, req) => {
     'Set-Cookie',
     `ksJwt=${token}; Secure; SameSite=None;Path=/;Max-Age=${60 * 60 * 24 * 90}`
   );
+  //DELETE
   // res.set(
   //   'Access-Control-Allow-Origin',
-  //   'https://kochstudio-react.netlify.app/'
+  //   req.headers.origin,
   // );
-  // // // // res.set( CHECK
-  // // // //   'Access-Control-Allow-Origin',
-  // // // //   req.headers.origin,
-  // // // //   'https://kochstudio-react.netlify.app/'
-  // // // // );
   // res.set('Access-Control-Allow-Credentials', 'true');
   // res.set(
   //   'Access-Control-Expose-Headers',
@@ -133,6 +129,10 @@ exports.protect = catchAsync(async (req, res, next) => {
     console.log('🏆🏆🏆', currentUser);
     await demoUserRecipeList(currentUser);
     console.log('❌');
+    res.status(200).json({
+      status: 'success'
+    });
+    return;
   }
   req.user = currentUser;
   next();
