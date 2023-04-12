@@ -21,7 +21,11 @@ const sendLoginToken = async (user, statusCode, res, req) => {
     'Set-Cookie',
     `ksJwt=${token}; Secure; SameSite=None;Path=/;Max-Age=${60 * 60 * 24 * 90}`
   );
-  res.set('Access-Control-Allow-Origin', req.headers.origin);
+  res.set(
+    'Access-Control-Allow-Origin',
+    req.headers.origin,
+    'https://kochstudio-react.netlify.app/'
+  );
   res.set('Access-Control-Allow-Credentials', 'true');
   res.set(
     'Access-Control-Expose-Headers',
