@@ -13,7 +13,6 @@ const filteredObj = (body, ...allowedFields) => {
 // on app start check token, send back userData
 exports.getAppData = catchAsync(async (req, res) => {
   // console.log('UserController', req.user.appData);
-
   req.user.role = undefined;
   res.status(200).json({ user: req.user });
 });

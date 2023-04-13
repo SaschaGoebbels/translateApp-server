@@ -129,10 +129,10 @@ exports.protect = catchAsync(async (req, res, next) => {
     console.log('🏆🏆🏆', currentUser);
     await demoUserRecipeList(currentUser);
     console.log('❌');
-    res.status(200).json({
-      status: 'success'
-    });
-    return;
+    // // // res.status(200).json({
+    // // //   status: 'success'
+    // // // });
+    // // // return;
   }
   req.user = currentUser;
   next();
