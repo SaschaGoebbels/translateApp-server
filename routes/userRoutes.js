@@ -9,7 +9,6 @@ router.post('/login', authController.login);
 router.post('/logout', authController.logout);
 
 //  authController.protect just for logged in users
-// router.post('/submit-password', authController.passwordReset);
 router.patch(
   '/updateMyPassword',
   authController.protect,
@@ -22,8 +21,8 @@ router.post('/forgotPassword', authController.forgotPassword);
 router.route('/submitPassword').get(authController.submitPassword);
 router.patch('/resetPassword/:token', authController.resetPassword);
 
+// app specific routes
 router.get('/appData', authController.protect, userController.getAppData);
-// router.get('/appData', authController.protect, userController.getAppData);CHECK
 router.post('/appData', authController.protect, userController.postAppData);
 router.post(
   '/updateSettings',
