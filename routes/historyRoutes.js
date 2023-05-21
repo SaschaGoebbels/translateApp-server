@@ -1,5 +1,5 @@
 const express = require('express');
-const userController = require('../controllers/userController');
+const historyController = require('../controllers/historyController');
 const authController = require('../controllers/authController');
 
 const router = express.Router();
@@ -7,7 +7,7 @@ const router = express.Router();
 router.post(
   '/deleteHistoryList',
   authController.protect,
-  userController.deleteRecipeList
+  historyController.deleteHistoryList
 );
 
 module.exports = router;
