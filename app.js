@@ -19,9 +19,7 @@ const cookieParser = require('cookie-parser');
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 
-const recipeRouter = require('./routes/recipeRoutes');
 const userRouter = require('./routes/userRoutes');
-const appDataRouter = require('./routes/appDataRoutes');
 const authController = require('./controllers/authController');
 
 const app = express();
@@ -34,9 +32,11 @@ app.use('/styles', express.static(path.join(__dirname, '/css/style.css'))); //DE
 // app.use(express.static(path.join(__dirname, 'static')));
 app.use(
   cors({
-    origin: ['https://kochstudio-react.netlify.app',
-    'http://localhost:3001',
-    'http://127.0.0.1:3000'],
+    origin: [
+      'https://translateApp.netlify.app',
+      'http://localhost:3001',
+      'http://127.0.0.1:3000'
+    ],
     credentials: true
   })
 );
@@ -83,23 +83,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// routes
-// // // app.get(
-// // //   '/submitPassword/:token',
-// // //   // authController.submitPassword
-// // //   (req, res) => {
-// // //     const parameters = req.body;
-// // //     parameters.token = req.token;
-// // //     res.status(200).render('submitPassword', {
-// // //       userName: 'req.userName',
-// // //       confirmStatus: false
-// // //     });
-// // //   }
-// // // );
-
-app.use('/api/v1/recipe', recipeRouter);
 app.use('/api/v1/users', userRouter);
-app.use('/api/v1/appData', appDataRouter);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Url: ${req.originalUrl} nicht gefunden!`, 404));

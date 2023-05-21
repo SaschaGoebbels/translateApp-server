@@ -41,17 +41,12 @@ const userSchema = new mongoose.Schema({
   active: { type: Boolean, default: true, select: false },
   createdAt: { type: Date, default: Date.now, select: false },
   updatedAt: { type: Date, default: Date.now, select: false },
-  appData: {
+  settings: {
     type: Object,
-    default: {
-      settings: {
-        shoppingListSettings: { avoidList: 'Salz ,Pfeffer ,Chili ' }
-      },
-      recipeList: [],
-      shoppingList: [],
-      weeklyPlan: []
-    }
-  }
+    default: {}
+  },
+  history: { type: Object, default: {} },
+  learn: { type: Object, default: {} }
 });
 
 userSchema.pre('save', async function(next) {

@@ -6,7 +6,6 @@ const { promisify } = require('util');
 const AppError = require('../utils/appError');
 
 const User = require('./../models/userModel');
-const Recipes = require('../models/recipeModel');
 
 const catchAsync = require('../utils/catchAsync');
 const sendEmail = require('../utils/email');
@@ -21,16 +20,7 @@ const sendLoginToken = async (user, statusCode, res, req) => {
     'Set-Cookie',
     `ksJwt=${token}; Secure; SameSite=None;Path=/;Max-Age=${60 * 60 * 24 * 90}`
   );
-  //DELETE
-  // res.set(
-  //   'Access-Control-Allow-Origin',
-  //   req.headers.origin,
-  // );
-  // res.set('Access-Control-Allow-Credentials', 'true');
-  // res.set(
-  //   'Access-Control-Expose-Headers',
-  //   'date, etag, access-control-allow-origin, access-control-allow-credentials'
-  // );
+
   // // // remove password & role from output
   user.password = undefined;
   user.role = undefined;
