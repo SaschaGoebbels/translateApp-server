@@ -24,5 +24,9 @@ yarn-error.log*
 
 #node
 config.env
+.env
 /dev-data
 /public
+
+#todo
+/todo.md
